@@ -1,4 +1,4 @@
-package com.pokegame.app.servicio;
+package com.pokegame.app.util;
 
 import java.io.InputStream;
 import java.sql.Connection;

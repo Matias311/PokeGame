@@ -1,6 +1,6 @@
 package com.pokegame.app;
 
-import com.pokegame.app.servicio.ConexionBaseDeDatos;
+import com.pokegame.app.util.ConexionBaseDeDatos;
 
 /** Hello world! */
 public class App {
