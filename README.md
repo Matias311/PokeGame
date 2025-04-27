@@ -5,7 +5,10 @@
 - `dao/`: Data Access Object. Contiene las clases que se encargan de la comunicación con la base de datos usando JDBC.
 - `modelo/`: Clases de entidad o modelos, por ejemplo: `Usuario`, `Producto`, etc.
 - `servicio/`: Lógica de negocio que conecta la GUI con el DAO.
-- `test/`: Pruebas unitarias con JUnit.
+
+Dao / data access information object / un objeto Pokemon 3 tres archivos 
+
+Repository / es lo mismo pero mejor / interfas -> dao / servio  -> te obliga a seguir una logica
 
 # Funcionamiento de la Conexión
 
