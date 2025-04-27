@@ -25,3 +25,5 @@ Repository / es lo mismo pero mejor / interfas -> dao / servio  -> te obliga a s
 
 3. Utilizar siempre la clase estática para la conexión a la base de datos.  
    Esto permite evitar múltiples instancias y seguir mejores prácticas.
+
+4. HOLAAAAA
