@@ -18,12 +18,6 @@ public class Pokedex extends JPanel {
   private static int inicio = 0;
   private final int CANT = 20;
 
-  // TODO: modificar la logica para crear un thread y que haga un
-  // lazy load y vaya cargando los proximos pokemons atras de los
-  // primeros 40 pokemon
-
-  // TODO: optimizar cartapokemon, pokedex, repository imagen pokemon, implement imagen, pokemon
-
   /** Crea la tab de la pokedex, donde se muestran los pokemons, con filtros. */
   public Pokedex() {
     setLayout(new BorderLayout());
