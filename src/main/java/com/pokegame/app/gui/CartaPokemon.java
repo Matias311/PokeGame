@@ -2,11 +2,10 @@ package com.pokegame.app.gui;
 
 import com.pokegame.app.modelo.Imagen;
 import com.pokegame.app.modelo.Pokemon;
+import com.pokegame.app.util.ImagenCache;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.net.URL;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -27,10 +26,17 @@ public class CartaPokemon extends JPanel {
     nombrePokemon.setFont(new Font("Arial", Font.BOLD, 16));
     add(BorderLayout.SOUTH, nombrePokemon);
     try {
-      URL url = new URL(imagen.getImagenFrente());
-      ImageIcon image = new ImageIcon(url, pokemon.getNombre());
-      JLabel imageLabel = new JLabel(image);
+      JLabel imageLabel = new JLabel();
       add(BorderLayout.CENTER, imageLabel);
+      ImagenCache.getImage(
+          imagen.getImagenFrente(),
+          imageIcon -> {
+            imageLabel.setIcon(imageIcon);
+            imageLabel.setHorizontalAlignment(JLabel.CENTER);
+            imageLabel.setVerticalAlignment(JLabel.CENTER);
+            imageLabel.revalidate();
+            imageLabel.repaint();
+          });
     } catch (Exception e) {
       System.out.println(e);
     }
