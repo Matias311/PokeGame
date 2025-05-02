@@ -14,6 +14,17 @@ public class Pokemon {
   private int defensa;
 
   /**
+   * crea un pokemon con el id, nombre.
+   *
+   * @param id int
+   * @param nombre String
+   */
+  public Pokemon(int id, String nombre) {
+    this.id = id;
+    this.nombre = nombre;
+  }
+
+  /**
    * Recive id, nombre, descripcion, altura, peso, region, vida, ataque del pokemon.
    *
    * @param id int
@@ -33,7 +44,8 @@ public class Pokemon {
       int peso,
       String region,
       int vida,
-      int ataque) {
+      int ataque,
+      int defensa) {
     this.id = id;
     this.nombre = nombre;
     this.descripcion = descripcion;
@@ -42,6 +54,7 @@ public class Pokemon {
     this.region = region;
     this.vida = vida;
     this.ataque = ataque;
+    this.defensa = defensa;
   }
 
   public int getId() {
