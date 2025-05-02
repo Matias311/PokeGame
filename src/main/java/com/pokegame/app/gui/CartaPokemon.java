@@ -22,12 +22,15 @@ public class CartaPokemon extends JPanel {
   public CartaPokemon(Pokemon pokemon, Imagen imagen) {
     setPreferredSize(new Dimension(150, 150));
     setLayout(new BorderLayout());
+    // Nombre del pokemon
     JLabel nombrePokemon = new JLabel(pokemon.getNombre(), SwingConstants.CENTER);
     nombrePokemon.setFont(new Font("Arial", Font.BOLD, 16));
     add(BorderLayout.SOUTH, nombrePokemon);
+    // imagen
     try {
       JLabel imageLabel = new JLabel();
       add(BorderLayout.CENTER, imageLabel);
+      // peticion de imagen al cache, carga asincrona
       ImagenCache.getImage(
           imagen.getImagenFrente(),
           imageIcon -> {

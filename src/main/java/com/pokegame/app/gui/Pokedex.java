@@ -17,11 +17,13 @@ public class Pokedex extends JPanel {
   private JPanel contenedorPokemon;
   private static int inicio = 0;
   private final int CANT = 20;
+  private PokemonRepositoryImpl pokemonServices = new PokemonRepositoryImpl();
 
   /** Crea la tab de la pokedex, donde se muestran los pokemons, con filtros. */
   public Pokedex() {
     setLayout(new BorderLayout());
     setSize(900, 800);
+
     // Panel North, seccion busqueda, filtro
     JPanel panelNav = new JPanel();
     JTextField barraBusqueda = new JTextField();
@@ -43,10 +45,8 @@ public class Pokedex extends JPanel {
 
     add(panelNav, BorderLayout.NORTH);
     // Panel de cartas pokemon
-    PokemonRepositoryImpl pokemonServices = new PokemonRepositoryImpl();
     List<Pokemon> listaPokemon = pokemonServices.traerPaginacionPokemon(inicio, CANT);
     contenedorPokemon = pintarCartas(listaPokemon);
-
     add(contenedorPokemon, BorderLayout.CENTER);
 
     // botones de adelante y retroceder
@@ -54,7 +54,6 @@ public class Pokedex extends JPanel {
     JButton btnRetroceder = new JButton("Retroceder");
     if (inicio == 0 || inicio < 0) {
       btnRetroceder.setEnabled(false);
-      inicio = 0;
     }
     btnRetroceder.addActionListener(
         e -> {
@@ -65,18 +64,18 @@ public class Pokedex extends JPanel {
           }
           rePintarContenedor(inicio, pokemonServices);
         });
-
     btnPanel.add(btnRetroceder);
+
     JButton btnAdelante = new JButton("Adelante");
     if (inicio >= 131) {
       btnAdelante.setEnabled(false);
-      inicio = 131;
     }
     btnAdelante.addActionListener(
         e -> {
           inicio += 20;
           if (inicio >= 131) {
             inicio = 131;
+            btnAdelante.setEnabled(false);
           }
           if (inicio > 0) {
             btnRetroceder.setEnabled(true);
