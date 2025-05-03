@@ -46,6 +46,7 @@ public class Pokemon {
       int vida,
       int ataque,
       int defensa) {
+    
     this.id = id;
     this.nombre = nombre;
     this.descripcion = descripcion;

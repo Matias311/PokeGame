@@ -11,6 +11,7 @@ import java.util.List;
 /** PokemonRepositoryImpl. */
 public class PokemonRepositoryImpl implements PokemonRepository<Pokemon> {
 
+
   private Connection conn = com.pokegame.app.util.ConexionBaseDeDatos.getConexion();
 
   @Override
@@ -28,6 +29,7 @@ public class PokemonRepositoryImpl implements PokemonRepository<Pokemon> {
       System.out.println(e);
     }
     return lista;
+
   }
 
   @Override
@@ -60,6 +62,7 @@ public class PokemonRepositoryImpl implements PokemonRepository<Pokemon> {
     throw new UnsupportedOperationException("Unimplemented method 'traerPokemonId'");
   }
 
+
   /**
    * Crea pokemon con id, nombre.
    *
@@ -78,4 +81,5 @@ public class PokemonRepositoryImpl implements PokemonRepository<Pokemon> {
     }
     return lista;
   }
+
 }

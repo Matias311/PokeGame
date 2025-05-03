@@ -19,6 +19,7 @@ public class Pokedex extends JPanel {
   private final int CANT = 20;
   private PokemonRepositoryImpl pokemonServices = new PokemonRepositoryImpl();
 
+
   /** Crea la tab de la pokedex, donde se muestran los pokemons, con filtros. */
   public Pokedex() {
     setLayout(new BorderLayout());

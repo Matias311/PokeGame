@@ -16,4 +16,5 @@ public interface PokemonRepository<T> {
   T traerPokemonId(T id);
 
   List<T> traerPaginacionPokemon(int inicio, int cant);
+
 }
