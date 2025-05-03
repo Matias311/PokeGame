@@ -13,8 +13,12 @@ public class ConexionBaseDeDatos {
    * @return Connection
    */
   public static Connection getConexion() {
-    if (conexion != null) {
-      return conexion;
+    try {
+      if (conexion != null && !conexion.isClosed()) {
+        return conexion;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
 
     Properties prop = new Properties();
