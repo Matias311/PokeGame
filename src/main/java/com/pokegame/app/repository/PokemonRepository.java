@@ -4,7 +4,6 @@ import java.util.List;
 
 /** PokeDexRepository. */
 public interface PokemonRepository<T> {
-
   List<T> traerPokemonOrdenadoNombre();
 
   List<T> traerPokemonOrdenadoId();

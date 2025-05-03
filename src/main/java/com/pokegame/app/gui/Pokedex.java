@@ -23,6 +23,7 @@ public class Pokedex extends JPanel {
   public Pokedex() {
     setLayout(new BorderLayout());
     setSize(900, 800);
+
     // Panel North, seccion busqueda, filtro
     JPanel panelNav = new JPanel();
     JTextField barraBusqueda = new JTextField();
