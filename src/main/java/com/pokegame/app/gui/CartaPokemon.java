@@ -22,7 +22,7 @@ import javax.swing.SwingConstants;
 public class CartaPokemon extends JPanel {
 
   // TODO: Crear los apuntes de los thread
-  // TODO: Crear estilo de las cartas, sombre y borde para destingir cada carta
+  // TODO: Crear estilo de las cartas, sombra y borde para distinguir cada carta
 
   /**
    * Obtiene el objeto pokemon, imagen y crea la carta para el menu principal.
