@@ -1,6 +1,6 @@
 package com.pokegame.app.repository.implementacion;
 
-import com.pokegame.app.modelo.PokemonDTO;
+import com.pokegame.app.modelo.Pokemon;
 import com.pokegame.app.util.ConexionBaseDeDatos;
 import java.sql.*;
 import java.util.*;
@@ -22,18 +22,15 @@ public class EquipoRepositoryImpl {
         return equipos;
     }
 
-    public List<PokemonDTO> obtenerPokemonesDeEquipo(String nombreEquipo) {
-        List<PokemonDTO> pokemones = new ArrayList<>();
-        String query = """
-      
-                SELECT p.id, p.nombre, p.descripcion, p.altura, p.peso, p.region,
-             p.vida, p.ataque, p.defensa, img.imagen_frente, img.imagen_espalda
-      FROM Equipo e
-      JOIN EquipoPokemon ep ON e.id = ep.id_equipo
-      JOIN Pokemon p ON ep.id_pokemon = p.id
-      LEFT JOIN imagenes img ON img.id_pokemon = p.id
-      WHERE e.nombre = ?
-      """;
+    public List<Pokemon> obtenerPokemonesDeEquipo(String nombreEquipo) {
+        List<Pokemon> pokemones = new ArrayList<>();
+        String query = "SELECT p.id, p.nombre, p.descripcion, p.altura, p.peso, p.region, "
+             + "p.vida, p.ataque, p.defensa, img.imagen_frente, img.imagen_espalda "
+             + "FROM Equipo e "
+             + "JOIN EquipoPokemon ep ON e.id = ep.id_equipo "
+             + "JOIN Pokemon p ON ep.id_pokemon = p.id "
+             + "LEFT JOIN imagenes img ON img.id_pokemon = p.id "
+             + "WHERE e.nombre = ?";
 
         try (Connection conn = ConexionBaseDeDatos.getConexion();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -42,7 +39,7 @@ public class EquipoRepositoryImpl {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                pokemones.add(new PokemonDTO(
+                pokemones.add(new Pokemon(
                         rs.getInt("id"),
                         rs.getString("nombre"),
                         rs.getString("descripcion"),
