@@ -1,10 +1,11 @@
 package com.pokegame.app.gui;
 
-import com.pokegame.app.modelo.PokemonDTO;
+import com.pokegame.app.modelo.Pokemon;
 import com.pokegame.app.repository.implementacion.EquipoRepositoryImpl;
+import com.pokegame.app.repository.implementacion.ImagenRepositoryImpl;
+
 import javax.swing.*;
 import java.awt.*;
-import java.net.URL;
 import java.util.List;
 
 public class Equipo extends JPanel {
@@ -55,29 +56,12 @@ public class Equipo extends JPanel {
         panelPokemones.removeAll();
         String equipoSeleccionado = (String) comboEquipos.getSelectedItem();
         if (equipoSeleccionado != null) {
-            List<PokemonDTO> pokemones = repo.obtenerPokemonesDeEquipo(equipoSeleccionado);
-            pokemones.forEach(pokemon -> panelPokemones.add(crearTarjetaPokemon(pokemon)));
+            List<Pokemon> pokemones = repo.obtenerPokemonesDeEquipo(equipoSeleccionado);
+            pokemones.forEach(pokemon -> panelPokemones.add(new CartaPokemon(pokemon, new ImagenRepositoryImpl().buscarImagenPorIdPortadaPokemon(pokemon.getId()))));
             panelPokemones.revalidate();
             panelPokemones.repaint();
         }
     }
 
-    private JPanel crearTarjetaPokemon(PokemonDTO pokemon) {
-        JPanel tarjeta = new JPanel(new BorderLayout());
-        tarjeta.setPreferredSize(new Dimension(150, 200));
-        tarjeta.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-        try {
-            URL url = new URL(pokemon.getImagenFrente());
-            ImageIcon icon = new ImageIcon(url);
-            tarjeta.add(new JLabel(icon), BorderLayout.CENTER);
-        } catch (Exception e) {
-            tarjeta.add(new JLabel("Sin imagen"), BorderLayout.CENTER);
-        }
-
-        JLabel nombre = new JLabel(pokemon.getNombre(), SwingConstants.CENTER);
-        tarjeta.add(nombre, BorderLayout.SOUTH);
-
-        return tarjeta;
-    }
 }
