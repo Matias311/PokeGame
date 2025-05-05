@@ -55,9 +55,30 @@ public class PokemonRepositoryImpl implements PokemonRepository<Pokemon> {
   }
 
   @Override
-  public Pokemon traerPokemonId(Pokemon id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'traerPokemonId'");
+  public Pokemon traerPokemonId(int id) {
+    Pokemon pokemon = null;
+    String sql = "SELECT * FROM Pokemon WHERE id = ?";
+    try {
+      PreparedStatement state = conn.prepareStatement(sql);
+      state.setInt(1, id);
+      ResultSet result = state.executeQuery();
+      while (result.next()) {
+        pokemon =
+            new Pokemon(
+                result.getInt("id"),
+                result.getString("nombre"),
+                result.getString("descripcion"),
+                result.getInt("altura"),
+                result.getInt("peso"),
+                result.getString("region"),
+                result.getInt("vida"),
+                result.getInt("ataque"),
+                result.getInt("defensa"));
+      }
+    } catch (Exception e) {
+      System.out.println(e);
+    }
+    return pokemon;
   }
 
   /**
