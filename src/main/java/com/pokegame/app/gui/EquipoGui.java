@@ -1,20 +1,19 @@
 package com.pokegame.app.gui;
 
-import com.pokegame.app.modelo.Pokemon;
+import com.pokegame.app.modelo.Equipo;
 import com.pokegame.app.repository.implementacion.EquipoRepositoryImpl;
-import com.pokegame.app.repository.implementacion.ImagenRepositoryImpl;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class Equipo extends JPanel {
+public class EquipoGui extends JPanel {
 
     private JComboBox<String> comboEquipos;
     private JPanel panelPokemones;
     private EquipoRepositoryImpl repo;
 
-    public Equipo() {
+    public EquipoGui() {
 
         setLayout(new BorderLayout());
         repo = new EquipoRepositoryImpl();
@@ -23,7 +22,7 @@ public class Equipo extends JPanel {
         comboEquipos.setPreferredSize(new Dimension(200, 25));
         cargarEquipos();
 
-        comboEquipos.addActionListener(e -> mostrarPokemones());
+        //comboEquipos.addActionListener(e -> mostrarPokemones());
 
         JLabel labelSeleccion = new JLabel("Equipo: ");
         labelSeleccion.setHorizontalAlignment(SwingConstants.CENTER);
@@ -43,16 +42,19 @@ public class Equipo extends JPanel {
 
         if (comboEquipos.getItemCount() > 0) {
             comboEquipos.setSelectedIndex(0);
-            mostrarPokemones();
+            //mostrarPokemones();
         }
     }
 
     private void cargarEquipos() {
-        List<String> equipos = repo.obtenerNombresEquipos();
-        equipos.forEach(comboEquipos::addItem);
+        List<Equipo> equipos = repo.obtenerNombresEquipos();
+        for (Equipo equipo : equipos) {
+            comboEquipos.addItem(equipo.getNombre());
+        }
     }
 
-    private void mostrarPokemones() {
+/*
+ *     private void mostrarPokemones() {
         panelPokemones.removeAll();
         String equipoSeleccionado = (String) comboEquipos.getSelectedItem();
         if (equipoSeleccionado != null) {
@@ -62,6 +64,6 @@ public class Equipo extends JPanel {
             panelPokemones.repaint();
         }
     }
-
+ */
 
 }
