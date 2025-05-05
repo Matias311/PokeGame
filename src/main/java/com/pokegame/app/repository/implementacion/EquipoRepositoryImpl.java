@@ -1,20 +1,21 @@
 package com.pokegame.app.repository.implementacion;
 
-import com.pokegame.app.modelo.Pokemon;
+import com.pokegame.app.modelo.Equipo;
+import com.pokegame.app.repository.EquiposRepository;
 import com.pokegame.app.util.ConexionBaseDeDatos;
 import java.sql.*;
 import java.util.*;
 
-public class EquipoRepositoryImpl {
+public class EquipoRepositoryImpl implements EquiposRepository<Equipo> {
 
-    public List<String> obtenerNombresEquipos() {
-        List<String> equipos = new ArrayList<>();
+    public List<Equipo> obtenerNombresEquipos() {
+        List<Equipo> equipos = new ArrayList<>();
         try (Connection conn = ConexionBaseDeDatos.getConexion();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT nombre FROM Equipo")) {
 
             while (rs.next()) {
-                equipos.add(rs.getString("nombre"));
+                equipos.add(new Equipo(rs.getString("nombre")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -22,7 +23,8 @@ public class EquipoRepositoryImpl {
         return equipos;
     }
 
-    public List<Pokemon> obtenerPokemonesDeEquipo(String nombreEquipo) {
+    /*
+     *     public List<Pokemon> obtenerPokemonesDeEquipo(String nombreEquipo) {
         List<Pokemon> pokemones = new ArrayList<>();
         String query = "SELECT p.id, p.nombre, p.descripcion, p.altura, p.peso, p.region, "
              + "p.vida, p.ataque, p.defensa, img.imagen_frente, img.imagen_espalda "
@@ -59,5 +61,6 @@ public class EquipoRepositoryImpl {
 
         return pokemones;
     }
+     */
 
     }
