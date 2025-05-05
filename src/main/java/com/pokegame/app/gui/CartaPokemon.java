@@ -21,9 +21,6 @@ import javax.swing.SwingConstants;
 /** CartaPokemon. */
 public class CartaPokemon extends JPanel {
 
-  // TODO: Crear los apuntes de los thread
-  // TODO: Crear estilo de las cartas, sombra y borde para distinguir cada carta
-
   /**
    * Obtiene el objeto pokemon, imagen y crea la carta para el menu principal.
    *
@@ -56,6 +53,8 @@ public class CartaPokemon extends JPanel {
     } catch (Exception e) {
       System.out.println(e);
     }
+    // Eventos del mouse, cambio de mouse y escuchar el evento al hacer click para mostrar la nueva
+    // GUI
     addMouseListener(
         new MouseAdapter() {
           @Override
@@ -66,6 +65,12 @@ public class CartaPokemon extends JPanel {
           @Override
           public void mouseExited(MouseEvent e) {
             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+          }
+
+          // Crea la ventana con la informacion del pokemon
+          @Override
+          public void mouseClicked(MouseEvent e) {
+            new InformacionPokemon(pokemon.getId(), imagen.getImagenFrente());
           }
         });
   }
