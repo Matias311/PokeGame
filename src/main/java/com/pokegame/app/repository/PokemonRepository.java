@@ -4,7 +4,6 @@ import java.util.List;
 
 /** PokeDexRepository. */
 public interface PokemonRepository<T> {
-  List<T> traerTodosLosPokemon();
 
   List<T> traerPokemonOrdenadoNombre();
 
@@ -15,4 +14,6 @@ public interface PokemonRepository<T> {
   T traerPokemonNombre(T nombre);
 
   T traerPokemonId(T id);
+
+  List<T> traerPaginacionPokemon(int inicio, int cant);
 }

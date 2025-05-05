@@ -19,7 +19,7 @@ public class InicioGui extends JFrame {
     }
 
     setTitle("PokeGame");
-    setSize(600, 600);
+    setSize(900, 800);
     setResizable(false);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
