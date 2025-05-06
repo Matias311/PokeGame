@@ -18,8 +18,9 @@ public class ConexionBaseDeDatos {
     }
 
     Properties prop = new Properties();
-    try (InputStream input =
-        ConexionBaseDeDatos.class.getClassLoader().getResourceAsStream("db.properties"); ) {
+    try {
+      InputStream input =
+          ConexionBaseDeDatos.class.getClassLoader().getResourceAsStream("db.properties");
       if (input == null) {
         throw new Exception("Error no se cargaron las variables de entorno");
       }
