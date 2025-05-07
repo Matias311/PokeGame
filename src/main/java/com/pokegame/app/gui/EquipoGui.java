@@ -2,6 +2,7 @@ package com.pokegame.app.gui;
 
 import com.pokegame.app.modelo.Equipo;
 import com.pokegame.app.modelo.Pokemon;
+import com.pokegame.app.repository.EquiposRepository;
 import com.pokegame.app.repository.implementacion.EquipoRepositoryImpl;
 import com.pokegame.app.repository.implementacion.ImagenRepositoryImpl;
 import com.pokegame.app.modelo.Imagen;
@@ -14,18 +15,16 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 public class EquipoGui extends JPanel {
 
     private JComboBox<String> comboEquipos;
     private JPanel panelPokemones;
-    private final EquipoRepositoryImpl repo;
+    private EquiposRepository<Equipo> equipoRepository = new EquipoRepositoryImpl();
 
     public EquipoGui() {
         setLayout(new BorderLayout());
-        repo = new EquipoRepositoryImpl();
 
         comboEquipos = new JComboBox<>();
         comboEquipos.setPreferredSize(new Dimension(200, 25));
@@ -46,9 +45,7 @@ public class EquipoGui extends JPanel {
         add(panelBoton, BorderLayout.SOUTH);
 
         panelPokemones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
-        JScrollPane scrollPane = new JScrollPane(panelPokemones);
-        scrollPane.setPreferredSize(new Dimension(800, 400));
-        add(scrollPane, BorderLayout.CENTER);
+        add(panelPokemones, BorderLayout.CENTER);
 
         if (comboEquipos.getItemCount() > 0) {
             comboEquipos.setSelectedIndex(0);
@@ -57,7 +54,7 @@ public class EquipoGui extends JPanel {
     }
 
     private void cargarEquipos() {
-        List<Equipo> equipos = repo.obtenerNombresEquipos();
+        List<Equipo> equipos = equipoRepository.obtenerNombresEquipos();
         for (Equipo equipo : equipos) {
             comboEquipos.addItem(equipo.getNombre());
         }
@@ -67,7 +64,7 @@ public class EquipoGui extends JPanel {
         panelPokemones.removeAll();
         String equipoSeleccionado = (String) comboEquipos.getSelectedItem();
         if (equipoSeleccionado != null) {
-            List<Pokemon> pokemones = repo.obtenerPokemonesDeEquipo(equipoSeleccionado);
+            List<Pokemon> pokemones = equipoRepository.obtenerPokemonesDeEquipo(equipoSeleccionado);
             ImagenRepositoryImpl imagenRepo = new ImagenRepositoryImpl();
             for (Pokemon pokemon : pokemones) {
                 Imagen imagen = imagenRepo.buscarImagenPorIdPortadaPokemon(pokemon.getId());
