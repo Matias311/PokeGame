@@ -132,16 +132,16 @@ public class EquipoGui extends JPanel {
 
 
     private void crearEquipo() {
-        String nombre = JOptionPane.showInputDialog(this, "Ingresa el nombre del nuevo equipo:");
+        String nombre = JOptionPane.showInputDialog(this, "Ingresa el nombre del nuevo equipo:", "Nuevo Equipo", JOptionPane.PLAIN_MESSAGE);
         if (nombre != null && !nombre.trim().isEmpty()) {
             nombre = nombre.trim();
             AdmEquipo nuevo = new AdmEquipo(nombre, 1); // Cliente fijo con id 1
             if (admEquipoRepository.crearEquipo(nuevo)) {
-                JOptionPane.showMessageDialog(this, "Equipo creado con éxito.");
+                JOptionPane.showMessageDialog(this, "Equipo creado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 cargarEquipos();
                 comboEquipos.setSelectedItem(nombre);
             } else {
-                JOptionPane.showMessageDialog(this, "Error al crear equipo.");
+                JOptionPane.showMessageDialog(this, "Error al crear equipo.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -152,10 +152,10 @@ public class EquipoGui extends JPanel {
             int confirmacion = JOptionPane.showConfirmDialog(this,
                     "¿Seguro que deseas borrar el equipo '" + nombre + "'?",
                     "Confirmar eliminación",
-                    JOptionPane.YES_NO_OPTION);
+                    JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (confirmacion == JOptionPane.YES_OPTION) {
                 if (admEquipoRepository.eliminarEquipoPorNombre(nombre)) {
-                    JOptionPane.showMessageDialog(this, "Equipo eliminado con éxito.");
+                    JOptionPane.showMessageDialog(this, "Equipo eliminado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                     cargarEquipos();
                     if (comboEquipos.getItemCount() > 0) {
                         comboEquipos.setSelectedIndex(0);
@@ -169,7 +169,7 @@ public class EquipoGui extends JPanel {
                         repaint();
                     }
                 } else {
-                    JOptionPane.showMessageDialog(this, "Error al eliminar equipo.");
+                    JOptionPane.showMessageDialog(this, "Error al eliminar equipo.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
