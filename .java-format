@@ -1,6 +1,6 @@
 {
   "version": "1.16.0",
-  "style": "GOOGLE",
+  "style": "AOSP",
   "formatJavadoc": true,
   "reorderImports": true
 }
