@@ -48,3 +48,9 @@ GUI → Servicio → Repository (Interface) → RepositoryImpl (JDBC) → Base d
 3. Utilizar siempre la clase estática para la conexión a la base de datos.  
    Esto permite evitar múltiples instancias y seguir mejores prácticas.
 
+
+### Configuracion de formateo 
+1. Asegurate de tener el archivo `.java-format`.
+2. Settings > Tools > Google Java Format
+3. Seleccionar "use project specific settings"
+4. apuntar al archivo `.java-format`. 
