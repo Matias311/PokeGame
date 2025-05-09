@@ -51,6 +51,17 @@ GUI → Servicio → Repository (Interface) → RepositoryImpl (JDBC) → Base d
 
 ### Configuracion de formateo 
 1. Asegurate de tener el archivo `.java-format`.
-2. Settings > Tools > Google Java Format
-3. Seleccionar "use project specific settings"
-4. apuntar al archivo `.java-format`. 
+2. instalar plugin google-java-format
+3. Settings > Tools > Google Java Format
+4. Seleccionar "use project specific settings"
+5. apuntar al archivo `.java-format`. 
+6. Activar format on save (opcional): file > settings > Tools > actions on save > reformat code 
+
+### Configuracion de linter
+1. instala plugin Checkstyle-IDEA
+2. asegurate de tener el archivo checkstyle.xml
+3. file > tools > checkstyle > click en add > use local checkstyle file > selecciona el archivo checkstyle.xml
+4. marcar la config como activa
+5. Opcional: En "scan scope", selecciona only java sources 
+6. aplica los cambio
+

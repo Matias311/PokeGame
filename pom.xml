@@ -92,6 +92,26 @@
             <mainClass>com.pokegame.app.App</mainClass>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>3.3.0</version>
+          <configuration>
+            <configLocation>checkstyle.xml</configLocation>
+            <!-- Archivo de reglas -->
+            <encoding>UTF-8</encoding>
+            <failOnViolation>true</failOnViolation>
+            <!-- Falla el build si hay errores -->
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>check</goal>
+                <!-- Se ejecuta en la fase "verify" -->
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
