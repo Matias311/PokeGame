@@ -65,7 +65,27 @@ public class Pokemon {
     this.id = id;
   }
 
+  /**
+   * Altera el nombre y pone la primera letra en mayusculas.
+   *
+   * @return String
+   */
   public String getNombre() {
+    char[] arrNombre = nombre.toCharArray();
+    arrNombre[0] = Character.toUpperCase(arrNombre[0]);
+    String nombreMod = "";
+    for (char c : arrNombre) {
+      nombreMod += c;
+    }
+    return nombreMod;
+  }
+
+  /**
+   * Retorna el nombre verdadero del pokemon (La primera letra esta en minuscula).
+   *
+   * @return String
+   */
+  public String getNombreSinModificar() {
     return nombre;
   }
 
