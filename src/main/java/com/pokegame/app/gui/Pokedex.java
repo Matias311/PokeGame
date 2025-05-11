@@ -52,9 +52,10 @@ public class Pokedex extends JPanel {
     // botones de adelante y retroceder
     JPanel btnPanel = new JPanel();
     JButton btnRetroceder = new JButton("Retroceder");
-    if (inicio == 0 || inicio < 0) {
-      btnRetroceder.setEnabled(false);
-    }
+    btnRetroceder.setEnabled(false);
+    btnPanel.add(btnRetroceder);
+    JButton btnAdelante = new JButton("Adelante");
+    btnPanel.add(btnAdelante);
     btnRetroceder.addActionListener(
         e -> {
           inicio -= 20;
@@ -62,14 +63,11 @@ public class Pokedex extends JPanel {
             inicio = 0;
             btnRetroceder.setEnabled(false);
           }
+          if (inicio < 131) {
+            btnAdelante.setEnabled(true);
+          }
           rePintarContenedor(inicio, pokemonServices);
         });
-    btnPanel.add(btnRetroceder);
-
-    JButton btnAdelante = new JButton("Adelante");
-    if (inicio >= 131) {
-      btnAdelante.setEnabled(false);
-    }
     btnAdelante.addActionListener(
         e -> {
           inicio += 20;
@@ -82,7 +80,6 @@ public class Pokedex extends JPanel {
           }
           rePintarContenedor(inicio, pokemonServices);
         });
-    btnPanel.add(btnAdelante);
     add(btnPanel, BorderLayout.SOUTH);
   }
 
