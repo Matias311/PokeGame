@@ -11,7 +11,7 @@ public interface PokemonRepository<T> {
 
   List<T> traerPokemonOrdenadoAtaque();
 
-  T traerPokemonNombre(T nombre);
+  List<T> traerPokemonNombre(String nombre);
 
   T traerPokemonId(int id);
 

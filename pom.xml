@@ -40,6 +40,12 @@
       <artifactId>mssql-jdbc</artifactId>
       <version>12.10.0.jre11</version>
     </dependency>
+    <!--Dependencia para encriptar claves Bcrypt-->
+    <dependency>
+      <groupId>at.favre.lib</groupId>
+      <artifactId>bcrypt</artifactId>
+      <version>0.10.2</version>
+    </dependency>
   </dependencies>
   <build>
     <pluginManagement>

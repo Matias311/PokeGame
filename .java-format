@@ -1,6 +1,5 @@
 {
   "version": "1.16.0",
-  "style": "AOSP",
   "formatJavadoc": true,
   "reorderImports": true
 }

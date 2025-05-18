@@ -5,6 +5,7 @@ import com.pokegame.app.repository.PokemonRepository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class PokemonRepositoryImpl implements PokemonRepository<Pokemon> {
     List<Pokemon> lista = new ArrayList<Pokemon>();
     try (PreparedStatement state =
         conn.prepareStatement(
-            "SELECT id, nombre FROM Pokemon ORDER BY id ASC OFFSET ? ROWS FETCH NEXT ? ROWS"
+            "SELECT id, nombre FROM Pokemon ORDER BY id OFFSET ? ROWS FETCH NEXT ? ROWS"
                 + " ONLY"); ) {
       state.setInt(1, inicio);
       state.setInt(2, cant);
@@ -49,9 +50,18 @@ public class PokemonRepositoryImpl implements PokemonRepository<Pokemon> {
   }
 
   @Override
-  public Pokemon traerPokemonNombre(Pokemon nombre) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'traerPokemonNombre'");
+  public List<Pokemon> traerPokemonNombre(String nombre) {
+    List<Pokemon> lista = new ArrayList<Pokemon>();
+    String preNombre = nombre.toLowerCase().trim() + "%";
+    try (PreparedStatement state =
+        conn.prepareStatement("select id, nombre from Pokemon where nombre like ?"); ) {
+      state.setString(1, preNombre);
+      ResultSet result = state.executeQuery();
+      lista = crearListaPokemonIdNombre(result);
+    } catch (SQLException e) {
+      System.out.println(e);
+    }
+    return lista;
   }
 
   @Override
