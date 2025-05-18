@@ -6,6 +6,7 @@ import com.pokegame.app.repository.implementacion.AtaqueRepositoryImpl;
 import com.pokegame.app.repository.implementacion.PokemonRepositoryImpl;
 import com.pokegame.app.util.AtaqueTableModel;
 import com.pokegame.app.util.ImagenCache;
+import com.pokegame.app.util.VerficarSesion;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -98,6 +99,11 @@ public class InformacionPokemon extends JFrame {
     // Botón con margen
     JButton agregarBoton = new JButton("Agregar al equipo");
     agregarBoton.setMargin(new Insets(5, 10, 5, 10));
+    if (VerficarSesion.isLoggedIn()) {
+      agregarBoton.setEnabled(true);
+    } else {
+      agregarBoton.setEnabled(false);
+    }
 
     seccionDescripcion.add(descripcionArea, BorderLayout.CENTER);
     seccionDescripcion.add(agregarBoton, BorderLayout.SOUTH);
