@@ -13,7 +13,7 @@ import javax.swing.*;
 
 // TODO: HACER QUE SE CARGUEN LOS EQUIPOS SOLO CON LA ID DE CLIENTE, QUE LOS EQUIPOS DE OTRA ID NO PUEDAN VER LOS MISMOS EQUIPOS QUE EL RESTO
 
-public class EquipoGui extends JPanel {
+public class  EquipoGui extends JPanel {
 
   private JComboBox<String> comboEquipos;
   private JPanel panelPokemones;
