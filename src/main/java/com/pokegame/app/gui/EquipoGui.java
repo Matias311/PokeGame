@@ -7,9 +7,20 @@ import com.pokegame.app.repository.EquiposRepository;
 import com.pokegame.app.repository.implementacion.EquipoRepositoryImpl;
 import com.pokegame.app.repository.implementacion.ImagenRepositoryImpl;
 
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.JComboBox;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.util.List;
-import javax.swing.*;
 
 // TODO: HACER QUE SE CARGUEN LOS EQUIPOS SOLO CON LA ID DE CLIENTE, QUE LOS EQUIPOS DE OTRA ID NO PUEDAN VER LOS MISMOS EQUIPOS QUE EL RESTO
 

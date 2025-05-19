@@ -2,6 +2,7 @@ package com.pokegame.app.repository;
 
 import com.pokegame.app.modelo.Equipo;
 import com.pokegame.app.modelo.Pokemon;
+
 import java.util.List;
 
 public interface EquiposRepository<T> {

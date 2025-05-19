@@ -9,26 +9,29 @@ import com.pokegame.app.repository.implementacion.PokemonRepositoryImpl;
 import com.pokegame.app.util.AtaqueTableModel;
 import com.pokegame.app.util.ImagenCache;
 import com.pokegame.app.util.VerficarSesion;
-import java.awt.BorderLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
+
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JComboBox;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
+
+import java.awt.GridLayout;
+import java.awt.BorderLayout;
+import java.awt.Insets;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import java.util.List;
 
 public class InformacionPokemon extends JFrame {
 
