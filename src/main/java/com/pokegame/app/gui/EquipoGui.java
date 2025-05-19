@@ -6,19 +6,25 @@ import com.pokegame.app.modelo.Pokemon;
 import com.pokegame.app.repository.EquiposRepository;
 import com.pokegame.app.repository.implementacion.EquipoRepositoryImpl;
 import com.pokegame.app.repository.implementacion.ImagenRepositoryImpl;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.util.List;
-import javax.swing.JButton;
+
+import javax.swing.JPanel;
 import javax.swing.JComboBox;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.util.List;
 
-public class EquipoGui extends JPanel {
+// TODO: HACER QUE SE CARGUEN LOS EQUIPOS SOLO CON LA ID DE CLIENTE, QUE LOS EQUIPOS DE OTRA ID NO PUEDAN VER LOS MISMOS EQUIPOS QUE EL RESTO
+
+public class  EquipoGui extends JPanel {
 
   private JComboBox<String> comboEquipos;
   private JPanel panelPokemones;
@@ -26,6 +32,7 @@ public class EquipoGui extends JPanel {
   private JLabel labelSinPokemones;
   private JButton botonBorrar;
   private JButton botonCambiarNombre;
+  private JButton botonActualizar;
   private EquiposRepository<Equipo> equipoRepository = new EquipoRepositoryImpl();
 
   public EquipoGui() {
@@ -35,11 +42,16 @@ public class EquipoGui extends JPanel {
     comboEquipos.setPreferredSize(new Dimension(200, 25));
     comboEquipos.addActionListener(e -> mostrarPokemones());
 
+    botonActualizar = new JButton("Actualizar");
+    botonActualizar.setPreferredSize(new Dimension(100, 25));
+    botonActualizar.addActionListener(e -> mostrarPokemones());
+
     JLabel labelSeleccion = new JLabel("Equipo: ");
     labelSeleccion.setHorizontalAlignment(SwingConstants.CENTER);
     JPanel panelCombo = new JPanel(new FlowLayout(FlowLayout.LEFT));
     panelCombo.add(labelSeleccion);
     panelCombo.add(comboEquipos);
+    panelCombo.add(botonActualizar);
     add(panelCombo, BorderLayout.NORTH);
 
     JButton botonCrear = new JButton("Crear equipo");
@@ -60,8 +72,7 @@ public class EquipoGui extends JPanel {
     panelBoton.add(botonCambiarNombre);
     add(panelBoton, BorderLayout.SOUTH);
 
-    panelPokemones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
-    add(panelPokemones, BorderLayout.CENTER);
+    panelPokemones = new JPanel(new GridBagLayout());
 
     labelSinPokemones = new JLabel("El equipo no tiene Pokemones aun");
     labelSinPokemones.setHorizontalAlignment(SwingConstants.CENTER);
@@ -82,6 +93,7 @@ public class EquipoGui extends JPanel {
     boolean hayEquipos = !equipos.isEmpty();
     botonBorrar.setEnabled(hayEquipos);
     botonCambiarNombre.setEnabled(hayEquipos);
+    botonActualizar.setEnabled(hayEquipos);
 
     if (hayEquipos) {
       remove(labelSinEquipos);
@@ -117,9 +129,18 @@ public class EquipoGui extends JPanel {
         remove(panelPokemones);
         add(labelSinPokemones, BorderLayout.CENTER);
       } else {
-        for (Pokemon pokemon : pokemones) {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        int columnas = 3;
+        for (int i = 0; i < pokemones.size(); i++) {
+          Pokemon pokemon = pokemones.get(i);
           Imagen imagen = imagenRepo.buscarImagenPorIdPortadaPokemon(pokemon.getId());
-          panelPokemones.add(new CartaPokemon(pokemon, imagen));
+          CartaPokemon carta = new CartaPokemon(pokemon, imagen);
+          gbc.gridx = i % columnas;
+          gbc.gridy = i / columnas;
+          panelPokemones.add(carta, gbc);
         }
         remove(labelSinPokemones);
         add(panelPokemones, BorderLayout.CENTER);
@@ -133,20 +154,19 @@ public class EquipoGui extends JPanel {
   }
 
   private void crearEquipo() {
-    String nombre =
-        JOptionPane.showInputDialog(
+    String nombre = JOptionPane.showInputDialog(
             this, "Ingresa el nombre del nuevo equipo:", "Nuevo Equipo", JOptionPane.PLAIN_MESSAGE);
     if (nombre != null && !nombre.trim().isEmpty()) {
       nombre = nombre.trim();
       Equipo nuevo = new Equipo(0, nombre, 1); // Cliente fijo con id 1
       if (equipoRepository.crearEquipo(nuevo)) {
         JOptionPane.showMessageDialog(
-            this, "Equipo creado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                this, "Equipo creado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         cargarEquipos();
         comboEquipos.setSelectedItem(nombre);
       } else {
         JOptionPane.showMessageDialog(
-            this, "Error al crear equipo.", "Error", JOptionPane.ERROR_MESSAGE);
+                this, "Error al crear equipo.", "Error", JOptionPane.ERROR_MESSAGE);
       }
     }
   }
@@ -154,8 +174,7 @@ public class EquipoGui extends JPanel {
   private void borrarEquipo() {
     String nombre = (String) comboEquipos.getSelectedItem();
     if (nombre != null) {
-      int confirmacion =
-          JOptionPane.showConfirmDialog(
+      int confirmacion = JOptionPane.showConfirmDialog(
               this,
               "¿Seguro que deseas borrar el equipo '" + nombre + "'?",
               "Confirmar eliminación",
@@ -164,22 +183,11 @@ public class EquipoGui extends JPanel {
       if (confirmacion == JOptionPane.YES_OPTION) {
         if (equipoRepository.eliminarEquipoPorNombre(nombre)) {
           JOptionPane.showMessageDialog(
-              this, "Equipo eliminado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                  this, "Equipo eliminado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
           cargarEquipos();
-          if (comboEquipos.getItemCount() > 0) {
-            comboEquipos.setSelectedIndex(0);
-            mostrarPokemones();
-          } else {
-            panelPokemones.removeAll();
-            panelPokemones.revalidate();
-            panelPokemones.repaint();
-            add(labelSinEquipos, BorderLayout.CENTER);
-            revalidate();
-            repaint();
-          }
         } else {
           JOptionPane.showMessageDialog(
-              this, "Error al eliminar equipo.", "Error", JOptionPane.ERROR_MESSAGE);
+                  this, "Error al eliminar equipo.", "Error", JOptionPane.ERROR_MESSAGE);
         }
       }
     }
@@ -188,38 +196,35 @@ public class EquipoGui extends JPanel {
   private void cambiarNombreEquipo() {
     String nombreActual = (String) comboEquipos.getSelectedItem();
     if (nombreActual != null && !nombreActual.equals("Sin equipos")) {
-      String nuevoNombre =
-          JOptionPane.showInputDialog(
+      String nuevoNombre = JOptionPane.showInputDialog(
               this,
               "Ingresa el nuevo nombre para el equipo:",
               "Cambiar nombre del equipo",
               JOptionPane.PLAIN_MESSAGE);
-
       if (nuevoNombre != null && !nuevoNombre.trim().isEmpty()) {
         nuevoNombre = nuevoNombre.trim();
         if (equipoRepository.actualizarNombreEquipo(nombreActual, nuevoNombre)) {
           JOptionPane.showMessageDialog(
-              this,
-              "Nombre del equipo actualizado con éxito.",
-              "Éxito",
-              JOptionPane.INFORMATION_MESSAGE);
+                  this,
+                  "Nombre del equipo actualizado con éxito.",
+                  "Éxito",
+                  JOptionPane.INFORMATION_MESSAGE);
           cargarEquipos();
           comboEquipos.setSelectedItem(nuevoNombre);
         } else {
           JOptionPane.showMessageDialog(
-              this,
-              "Error al actualizar el nombre del equipo.",
-              "Error",
-              JOptionPane.ERROR_MESSAGE);
+                  this,
+                  "Error al actualizar el nombre del equipo.",
+                  "Error",
+                  JOptionPane.ERROR_MESSAGE);
         }
       }
     } else {
       JOptionPane.showMessageDialog(
-          this,
-          "Selecciona un equipo válido para cambiar su nombre.",
-          "Advertencia",
-          JOptionPane.WARNING_MESSAGE);
+              this,
+              "Selecciona un equipo válido para cambiar su nombre.",
+              "Advertencia",
+              JOptionPane.WARNING_MESSAGE);
     }
   }
 }
-
