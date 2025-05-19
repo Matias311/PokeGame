@@ -54,7 +54,6 @@ public class EquipoRepositoryImpl implements EquiposRepository<Equipo> {
     return pokemones;
   }
 
-  // Método auxiliar para obtener ID incremental manualmente
   private int obtenerNuevoIdEquipo() throws SQLException {
     String sql = "SELECT ISNULL(MAX(id), 0) + 1 AS nuevoId FROM Equipo";
     try (PreparedStatement stmt = conn.prepareStatement(sql);
@@ -64,6 +63,35 @@ public class EquipoRepositoryImpl implements EquiposRepository<Equipo> {
       }
     }
     throw new SQLException("Hubo un problema al obtener el ID del Equipo.");
+  }
+
+  @Override
+  public int obtenerIdEquipoPorNombre(String nombreEquipo) {
+    String query = "SELECT id FROM Equipo WHERE nombre = ?";
+    try (PreparedStatement stmt = conn.prepareStatement(query)) {
+      stmt.setString(1, nombreEquipo);
+      ResultSet rs = stmt.executeQuery();
+      if (rs.next()) {
+        return rs.getInt("id");
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return -1;
+  }
+
+  public String obtenerNombreEquipoPorId(int idEquipo) {
+    String query = "SELECT nombre FROM Equipo WHERE id = ?";
+    try (PreparedStatement stmt = conn.prepareStatement(query)) {
+      stmt.setInt(1, idEquipo);
+      ResultSet rs = stmt.executeQuery();
+      if (rs.next()) {
+        return rs.getString("nombre");
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 
   @Override
