@@ -19,6 +19,25 @@ public class Cliente {
     this.passwordHash = com.pokegame.app.util.PasswordEncrypt.hashPassword(password);
   }
 
+  /**
+   * Se le pasa el id del cliente y el nombre, luego mediante el setter se le agrega la passwrod ya
+   * hasheada.
+   *
+   * @param id int
+   * @param nombreUsuario String
+   */
+  public Cliente(int id, String nombreUsuario) {
+    this.id = id;
+    this.nombreUsuario = nombreUsuario;
+  }
+
+  /**
+   * Se crea un cliente solamente con el nombre y la password sin hashear, en el repositoryimpl se
+   * le agrega el id.
+   *
+   * @param nombreUsuario String
+   * @param password Streing
+   */
   public Cliente(String nombreUsuario, String password) {
     this.nombreUsuario = nombreUsuario;
     this.passwordHash = com.pokegame.app.util.PasswordEncrypt.hashPassword(password);
@@ -32,19 +51,19 @@ public class Cliente {
     this.id = id;
   }
 
-  public String getNombre_usuario() {
+  public String getNombreUsuario() {
     return nombreUsuario;
   }
 
-  public void setNombre_usuario(String nombreUsuario) {
+  public void setNombreUsuario(String nombreUsuario) {
     this.nombreUsuario = nombreUsuario;
   }
 
-  public String getPassword_hash() {
+  public String getPasswordHash() {
     return passwordHash;
   }
 
-  public void setPassword_hash(String passwordHash) {
+  public void setPasswordHash(String passwordHash) {
     this.passwordHash = passwordHash;
   }
 }
