@@ -6,25 +6,26 @@ import com.pokegame.app.modelo.Pokemon;
 import com.pokegame.app.repository.EquiposRepository;
 import com.pokegame.app.repository.implementacion.EquipoRepositoryImpl;
 import com.pokegame.app.repository.implementacion.ImagenRepositoryImpl;
-
-import javax.swing.JPanel;
-import javax.swing.JComboBox;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.util.List;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.util.List;
 
-// TODO: HACER QUE SE CARGUEN LOS EQUIPOS SOLO CON LA ID DE CLIENTE, QUE LOS EQUIPOS DE OTRA ID NO PUEDAN VER LOS MISMOS EQUIPOS QUE EL RESTO
+// TODO: HACER QUE SE CARGUEN LOS EQUIPOS SOLO CON LA ID DE CLIENTE, QUE LOS EQUIPOS DE OTRA ID NO
+// PUEDAN VER LOS MISMOS EQUIPOS QUE EL RESTO
 
-public class  EquipoGui extends JPanel {
+/** EquipoGui. */
+public class EquipoGui extends JPanel {
 
   private JComboBox<String> comboEquipos;
   private JPanel panelPokemones;
@@ -35,6 +36,7 @@ public class  EquipoGui extends JPanel {
   private JButton botonActualizar;
   private EquiposRepository<Equipo> equipoRepository = new EquipoRepositoryImpl();
 
+  /** Crea la gui de equipo. */
   public EquipoGui() {
     setLayout(new BorderLayout());
 
@@ -154,19 +156,20 @@ public class  EquipoGui extends JPanel {
   }
 
   private void crearEquipo() {
-    String nombre = JOptionPane.showInputDialog(
+    String nombre =
+        JOptionPane.showInputDialog(
             this, "Ingresa el nombre del nuevo equipo:", "Nuevo Equipo", JOptionPane.PLAIN_MESSAGE);
     if (nombre != null && !nombre.trim().isEmpty()) {
       nombre = nombre.trim();
       Equipo nuevo = new Equipo(0, nombre, 1); // Cliente fijo con id 1
       if (equipoRepository.crearEquipo(nuevo)) {
         JOptionPane.showMessageDialog(
-                this, "Equipo creado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            this, "Equipo creado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         cargarEquipos();
         comboEquipos.setSelectedItem(nombre);
       } else {
         JOptionPane.showMessageDialog(
-                this, "Error al crear equipo.", "Error", JOptionPane.ERROR_MESSAGE);
+            this, "Error al crear equipo.", "Error", JOptionPane.ERROR_MESSAGE);
       }
     }
   }
@@ -174,7 +177,8 @@ public class  EquipoGui extends JPanel {
   private void borrarEquipo() {
     String nombre = (String) comboEquipos.getSelectedItem();
     if (nombre != null) {
-      int confirmacion = JOptionPane.showConfirmDialog(
+      int confirmacion =
+          JOptionPane.showConfirmDialog(
               this,
               "¿Seguro que deseas borrar el equipo '" + nombre + "'?",
               "Confirmar eliminación",
@@ -183,11 +187,11 @@ public class  EquipoGui extends JPanel {
       if (confirmacion == JOptionPane.YES_OPTION) {
         if (equipoRepository.eliminarEquipoPorNombre(nombre)) {
           JOptionPane.showMessageDialog(
-                  this, "Equipo eliminado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+              this, "Equipo eliminado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
           cargarEquipos();
         } else {
           JOptionPane.showMessageDialog(
-                  this, "Error al eliminar equipo.", "Error", JOptionPane.ERROR_MESSAGE);
+              this, "Error al eliminar equipo.", "Error", JOptionPane.ERROR_MESSAGE);
         }
       }
     }
@@ -196,7 +200,8 @@ public class  EquipoGui extends JPanel {
   private void cambiarNombreEquipo() {
     String nombreActual = (String) comboEquipos.getSelectedItem();
     if (nombreActual != null && !nombreActual.equals("Sin equipos")) {
-      String nuevoNombre = JOptionPane.showInputDialog(
+      String nuevoNombre =
+          JOptionPane.showInputDialog(
               this,
               "Ingresa el nuevo nombre para el equipo:",
               "Cambiar nombre del equipo",
@@ -205,26 +210,26 @@ public class  EquipoGui extends JPanel {
         nuevoNombre = nuevoNombre.trim();
         if (equipoRepository.actualizarNombreEquipo(nombreActual, nuevoNombre)) {
           JOptionPane.showMessageDialog(
-                  this,
-                  "Nombre del equipo actualizado con éxito.",
-                  "Éxito",
-                  JOptionPane.INFORMATION_MESSAGE);
+              this,
+              "Nombre del equipo actualizado con éxito.",
+              "Éxito",
+              JOptionPane.INFORMATION_MESSAGE);
           cargarEquipos();
           comboEquipos.setSelectedItem(nuevoNombre);
         } else {
           JOptionPane.showMessageDialog(
-                  this,
-                  "Error al actualizar el nombre del equipo.",
-                  "Error",
-                  JOptionPane.ERROR_MESSAGE);
+              this,
+              "Error al actualizar el nombre del equipo.",
+              "Error",
+              JOptionPane.ERROR_MESSAGE);
         }
       }
     } else {
       JOptionPane.showMessageDialog(
-              this,
-              "Selecciona un equipo válido para cambiar su nombre.",
-              "Advertencia",
-              JOptionPane.WARNING_MESSAGE);
+          this,
+          "Selecciona un equipo válido para cambiar su nombre.",
+          "Advertencia",
+          JOptionPane.WARNING_MESSAGE);
     }
   }
 }
