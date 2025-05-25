@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 /** Perfil. */
 public class Perfil extends JPanel {
 
-  private Cliente CLIENTE = VerificarSesion.getCliente();
+  private final Cliente cliente = VerificarSesion.getCliente();
   private InicioGui padre;
 
   /** Crea la interfaz del perfil. */
@@ -19,7 +19,7 @@ public class Perfil extends JPanel {
     setLayout(new GridLayout(2, 1, 5, 5));
 
     // Label del usuario
-    JLabel nombreUsuario = new JLabel(CLIENTE.getNombreUsuario());
+    JLabel nombreUsuario = new JLabel(cliente.getNombreUsuario());
     add(nombreUsuario);
 
     // Boton de cerrar sesion

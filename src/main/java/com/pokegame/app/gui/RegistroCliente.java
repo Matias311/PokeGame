@@ -82,15 +82,31 @@ public class RegistroCliente extends JFrame {
 
           boolean creada = VerificarSesion.register(username, pass1);
           if (creada) {
-            // TODO: hacer que se cierre una vez se le de click al panel de opcion
-            JOptionPane.showMessageDialog(null, "Se ha registrado correctamente");
+
+            int eleccion =
+                JOptionPane.showOptionDialog(
+                    null,
+                    "Se ha registrado correctamente",
+                    "Exito",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,
+                    null,
+                    new String[] {"OK"},
+                    0);
+
+            // cerrar al hacer click en ok en el joptionpane
+            if (eleccion == 0) {
+              this.dispose();
+            }
+
           } else {
             JOptionPane.showMessageDialog(null, "Error, verifique sus datos");
           }
         });
 
-    // TODO: hacer que al darle click a cancelar cierre este jframe
     cancelButton = createButton("CANCELAR", new Color(220, 80, 60));
+    // action al hacer click en el boton de cancelar / cierra el frame
+    cancelButton.addActionListener(e -> this.dispose());
 
     buttonPanel.add(registerButton);
     buttonPanel.add(cancelButton);

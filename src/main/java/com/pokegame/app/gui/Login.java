@@ -31,6 +31,12 @@ public class Login extends JPanel {
   private JButton registerButton;
   private InicioGui padre;
 
+  /**
+   * Crea el inicio de sesion. Se le pasa el inicio de gui para poder utilizar la funcion para
+   * recargar el tabbed pane.
+   *
+   * @param iniciogui InicioGui
+   */
   public Login(InicioGui iniciogui) {
     this.padre = iniciogui;
     setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -114,8 +120,9 @@ public class Login extends JPanel {
                 });
             JOptionPane.showMessageDialog(null, "Se ha iniciado sesion correctamente");
           } else {
-            // TODO: Hacer que si me equivoco limpiar los inputs
             JOptionPane.showMessageDialog(null, "Error, verifica los datos");
+            usernameField.setText("");
+            passwordField.setText("");
           }
         });
 
