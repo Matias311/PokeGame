@@ -33,8 +33,7 @@ public class InicioGui extends JFrame {
 
     if (VerificarSesion.isLoggedIn()) {
       tabbedPane.addTab("Equipos", new EquipoGui());
-      // TODO: Hacer parte de perfil
-      // TODO: Hacer parte de cerrar sesion
+      tabbedPane.addTab("Perfil", new Perfil(this));
     } else {
       tabbedPane.addTab("Iniciar Sesión", new Login(this));
     }
