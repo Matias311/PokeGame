@@ -31,6 +31,7 @@ public class RegistroCliente extends JFrame {
   private JButton registerButton;
   private JButton cancelButton;
 
+  /** Crea la guia de Registrar, aqui el usuariario puede crear su cuenta. */
   public RegistroCliente() {
     configureFrame();
     initComponents();
