@@ -20,8 +20,8 @@ public class ClienteRepositoryImpl implements ClienteRepository<Cliente> {
         conn.prepareStatement(
             "INSERT INTO Cliente (id, nombre_usuario, password) VALUES (?, ?, ?)")) {
       state.setInt(1, obtenerNuevoId());
-      state.setString(2, cliente.getNombre_usuario());
-      state.setString(3, cliente.getPassword_hash());
+      state.setString(2, cliente.getNombreUsuario());
+      state.setString(3, cliente.getPasswordHash());
 
       int rowsAffected = state.executeUpdate();
       status = rowsAffected > 0;
@@ -49,11 +49,8 @@ public class ClienteRepositoryImpl implements ClienteRepository<Cliente> {
       ResultSet result = state.executeQuery();
       while (result.next()) {
         if (PasswordEncrypt.verificarPassword(password, result.getString("password"))) {
-          cliente =
-              new Cliente(
-                  result.getInt("id"),
-                  result.getString("nombre_usuario"),
-                  result.getString("password"));
+          cliente = new Cliente(result.getInt("id"), result.getString("nombre_usuario"));
+          cliente.setPasswordHash(result.getString("password"));
         }
       }
     } catch (Exception e) {

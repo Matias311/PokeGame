@@ -1,6 +1,6 @@
 package com.pokegame.app.gui;
 
-import com.pokegame.app.util.VerficarSesion;
+import com.pokegame.app.util.VerificarSesion;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -26,10 +26,9 @@ public class Login extends JPanel {
   private static final int GAP = 15;
 
   private JTextField usernameField;
-  private JTextField passwordField;
+  private JPasswordField passwordField;
   private JButton loginButton;
   private JButton registerButton;
-  private VerficarSesion servicesSesion;
   private InicioGui padre;
 
   public Login(InicioGui iniciogui) {
@@ -107,7 +106,7 @@ public class Login extends JPanel {
         e -> {
           String nombre = usernameField.getText();
           String password = passwordField.getText();
-          boolean iniciado = VerficarSesion.login(nombre, password);
+          boolean iniciado = VerificarSesion.login(nombre, password);
           if (iniciado) {
             SwingUtilities.invokeLater(
                 () -> {

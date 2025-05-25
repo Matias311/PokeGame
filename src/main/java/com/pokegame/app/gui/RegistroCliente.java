@@ -1,6 +1,6 @@
 package com.pokegame.app.gui;
 
-import com.pokegame.app.util.VerficarSesion;
+import com.pokegame.app.util.VerificarSesion;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -27,7 +27,7 @@ public class RegistroCliente extends JFrame {
   private static final int GAP = 15;
 
   private JTextField usernameField;
-  private JTextField passwordField;
+  private JPasswordField passwordField;
   private JButton registerButton;
   private JButton cancelButton;
 
@@ -79,7 +79,7 @@ public class RegistroCliente extends JFrame {
           String username = usernameField.getText();
           String pass1 = passwordField.getText();
 
-          boolean creada = VerficarSesion.register(username, pass1);
+          boolean creada = VerificarSesion.register(username, pass1);
           if (creada) {
             // TODO: hacer que se cierre una vez se le de click al panel de opcion
             JOptionPane.showMessageDialog(null, "Se ha registrado correctamente");

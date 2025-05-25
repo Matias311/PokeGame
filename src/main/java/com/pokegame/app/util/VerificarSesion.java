@@ -3,8 +3,8 @@ package com.pokegame.app.util;
 import com.pokegame.app.modelo.Cliente;
 import com.pokegame.app.repository.implementacion.ClienteRepositoryImpl;
 
-/** VerficarSesion. */
-public class VerficarSesion {
+/** VerificarSesion. */
+public class VerificarSesion {
   private static Cliente cliente = null;
   private static ClienteRepositoryImpl services = new ClienteRepositoryImpl();
 

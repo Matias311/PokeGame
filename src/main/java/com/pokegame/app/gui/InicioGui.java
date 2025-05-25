@@ -1,6 +1,6 @@
 package com.pokegame.app.gui;
 
-import com.pokegame.app.util.VerficarSesion;
+import com.pokegame.app.util.VerificarSesion;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
@@ -31,7 +31,7 @@ public class InicioGui extends JFrame {
 
     tabbedPane.addTab("PokeDex", new Pokedex());
 
-    if (VerficarSesion.isLoggedIn()) {
+    if (VerificarSesion.isLoggedIn()) {
       tabbedPane.addTab("Equipos", new EquipoGui());
       // TODO: Hacer parte de perfil
       // TODO: Hacer parte de cerrar sesion
@@ -43,4 +43,3 @@ public class InicioGui extends JFrame {
     tabbedPane.repaint();
   }
 }
-
