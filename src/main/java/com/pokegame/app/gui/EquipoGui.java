@@ -139,6 +139,7 @@ public class EquipoGui extends JPanel {
         for (int i = 0; i < pokemones.size(); i++) {
           Pokemon pokemon = pokemones.get(i);
           Imagen imagen = imagenRepo.buscarImagenPorIdPortadaPokemon(pokemon.getId());
+          // TODO: Poner nueva clase y hacerla especifica
           CartaPokemon carta = new CartaPokemon(pokemon, imagen);
           gbc.gridx = i % columnas;
           gbc.gridy = i / columnas;

@@ -105,6 +105,7 @@ public class Pokedex extends JPanel {
     remove(contenedorPokemon);
     ImagenRepositoryImpl imagenServices = new ImagenRepositoryImpl();
     for (Pokemon pokemon : lista) {
+      // TODO: Poner nueva clase y hacerla especifica
       contenedorPokemon.add(
           new CartaPokemon(
               pokemon, imagenServices.buscarImagenPorIdPortadaPokemon(pokemon.getId())));
