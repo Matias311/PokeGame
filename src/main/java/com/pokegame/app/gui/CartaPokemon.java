@@ -19,7 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 /** CartaPokemon. */
-public class CartaPokemon extends JPanel {
+public abstract class CartaPokemon extends JPanel {
 
   /**
    * Obtiene el objeto pokemon, imagen y crea la carta para el menu principal.
