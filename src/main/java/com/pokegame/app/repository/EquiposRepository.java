@@ -11,7 +11,8 @@ public interface EquiposRepository<T> {
     boolean crearEquipo(Equipo equipo);
     boolean eliminarEquipoPorNombre(String nombreEquipo);
     boolean agregarPokemonAEquipo(int idEquipo, int idPokemon);
+    boolean eliminarPokemonDeEquipo(int idEquipo, int idPokemon);
     boolean actualizarNombreEquipo(String nombreActual, String nuevoNombre);
-    int obtenerIdEquipoPorNombre(String nombreEquipo); // Nueva función añadida
+    int obtenerIdEquipoPorNombre(String nombreEquipo);
     String obtenerNombreEquipoPorId(int idEquipo);
 }
