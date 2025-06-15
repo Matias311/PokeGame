@@ -1,12 +1,14 @@
 package com.pokegame.app.manager;
 
+import com.pokegame.app.util.VerificarSesion;
+
 import com.pokegame.app.modelo.Equipo;
 import com.pokegame.app.modelo.Pokemon;
 import com.pokegame.app.repository.implementacion.EquipoRepositoryImpl;
 
 import java.util.List;
 
-public class EquipoManager {
+public class    EquipoManager {
 
     private final EquipoRepositoryImpl equipoRepo = new EquipoRepositoryImpl();
 
@@ -23,8 +25,11 @@ public class EquipoManager {
     }
 
     public boolean crearEquipo(String nombre) {
-        return equipoRepo.crearEquipo(new Equipo(0, nombre, 1));
+        int clienteId = VerificarSesion.getCliente().getId();
+        Equipo equipo = new Equipo(0, nombre, clienteId);
+        return equipoRepo.crearEquipo(equipo);
     }
+
 
     public boolean eliminarEquipo(String nombre) {
         return equipoRepo.eliminarEquipoPorNombre(nombre);

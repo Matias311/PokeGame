@@ -4,6 +4,7 @@ import com.pokegame.app.modelo.Equipo;
 import com.pokegame.app.modelo.Pokemon;
 import com.pokegame.app.repository.EquiposRepository;
 import com.pokegame.app.util.ConexionBaseDeDatos;
+import com.pokegame.app.util.VerificarSesion;
 
 import java.sql.Connection;
 import java.sql.Statement;
@@ -21,17 +22,29 @@ public class EquipoRepositoryImpl implements EquiposRepository<Equipo> {
   @Override
   public List<Equipo> obtenerNombresEquipos() {
     List<Equipo> equipos = new ArrayList<>();
-    String query = "SELECT id, nombre, cliente_id FROM Equipo";
-    try (Statement stmt = conn.createStatement();
-         ResultSet rs = stmt.executeQuery(query)) {
-      while (rs.next()) {
-        equipos.add(new Equipo(rs.getInt("id"), rs.getString("nombre"), rs.getInt("cliente_id")));
+    int clienteId = VerificarSesion.getCliente().getId();
+
+    String query = "SELECT id, nombre, cliente_id FROM Equipo WHERE cliente_id = ?";
+
+    try (PreparedStatement stmt = conn.prepareStatement(query)) {
+      stmt.setInt(1, clienteId);
+      try (ResultSet rs = stmt.executeQuery()) {
+        while (rs.next()) {
+          equipos.add(new Equipo(
+                  rs.getInt("id"),
+                  rs.getString("nombre"),
+                  rs.getInt("cliente_id")
+          ));
+        }
       }
     } catch (SQLException e) {
       e.printStackTrace();
     }
+
     return equipos;
   }
+
+
 
   @Override
   public List<Pokemon> obtenerPokemonesDeEquipo(String nombreEquipo) {
@@ -69,9 +82,13 @@ public class EquipoRepositoryImpl implements EquiposRepository<Equipo> {
 
   @Override
   public int obtenerIdEquipoPorNombre(String nombreEquipo) {
-    String query = "SELECT id FROM Equipo WHERE nombre = ?";
+    int clienteId = VerificarSesion.getCliente().getId();
+
+    String query = "SELECT id FROM Equipo WHERE nombre = ? AND cliente_id = ?";
+
     try (PreparedStatement stmt = conn.prepareStatement(query)) {
       stmt.setString(1, nombreEquipo);
+      stmt.setInt(2, clienteId);
       ResultSet rs = stmt.executeQuery();
       if (rs.next()) {
         return rs.getInt("id");
@@ -79,8 +96,10 @@ public class EquipoRepositoryImpl implements EquiposRepository<Equipo> {
     } catch (SQLException e) {
       e.printStackTrace();
     }
+
     return -1;
   }
+
 
   @Override
   public String obtenerNombreEquipoPorId(int idEquipo) {
