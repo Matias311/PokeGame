@@ -1,5 +1,6 @@
 package com.pokegame.app.gui;
 
+import com.pokegame.app.serverChat.ServerChat;
 import com.pokegame.app.util.VerificarSesion;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
@@ -32,9 +33,18 @@ public class InicioGui extends JFrame {
     tabbedPane.addTab("PokeDex", new Pokedex());
 
     if (VerificarSesion.isLoggedIn()) {
+
+      // inicio de thread servidor
+      Runnable serverRunnable = new ServerChat();
+      Thread server = new Thread(serverRunnable);
+      server.start();
+
       tabbedPane.addTab("Equipos", new EquipoGui());
+      tabbedPane.addTab("Chat", new ChatInicio());
       tabbedPane.addTab("Perfil", new Perfil(this));
+
     } else {
+
       tabbedPane.addTab("Iniciar Sesión", new Login(this));
     }
 

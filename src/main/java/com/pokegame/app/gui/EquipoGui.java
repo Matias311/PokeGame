@@ -5,12 +5,23 @@ import com.pokegame.app.modelo.Equipo;
 import com.pokegame.app.modelo.Imagen;
 import com.pokegame.app.modelo.Pokemon;
 import com.pokegame.app.repository.implementacion.ImagenRepositoryImpl;
-
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.util.List;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
-import java.awt.*;
-import java.util.List;
 
 public class EquipoGui extends JPanel {
 
@@ -52,13 +63,16 @@ public class EquipoGui extends JPanel {
     labelSinEquipos.setFont(new Font("Arial", Font.BOLD, 18));
     add(labelSinEquipos, BorderLayout.CENTER);
 
-    addAncestorListener(new AncestorListener() {
-      public void ancestorAdded(AncestorEvent event) {
-        cargarEquipos();
-      }
-      public void ancestorRemoved(AncestorEvent event) {}
-      public void ancestorMoved(AncestorEvent event) {}
-    });
+    addAncestorListener(
+        new AncestorListener() {
+          public void ancestorAdded(AncestorEvent event) {
+            cargarEquipos();
+          }
+
+          public void ancestorRemoved(AncestorEvent event) {}
+
+          public void ancestorMoved(AncestorEvent event) {}
+        });
   }
 
   private void mostrarDialogoGestion() {
@@ -71,39 +85,49 @@ public class EquipoGui extends JPanel {
 
     JButton botonCrear = new JButton("Crear Equipo");
     botonCrear.setPreferredSize(new Dimension(200, 30));
-    botonCrear.addActionListener(e -> {
-      dialogo.dispose(); // Cierra antes de mostrar cualquier JOptionPane
-      String nombre = JOptionPane.showInputDialog(this, "Ingresa el nombre del nuevo equipo:", "Nuevo Equipo", JOptionPane.PLAIN_MESSAGE);
-      if (nombre != null && !nombre.trim().isEmpty()) {
-        if (manager.crearEquipo(nombre.trim())) {
-          JOptionPane.showMessageDialog(this, "Equipo creado con éxito.");
-          cargarEquipos();
-        }
-      }
-    });
+    botonCrear.addActionListener(
+        e -> {
+          dialogo.dispose(); // Cierra antes de mostrar cualquier JOptionPane
+          String nombre =
+              JOptionPane.showInputDialog(
+                  this,
+                  "Ingresa el nombre del nuevo equipo:",
+                  "Nuevo Equipo",
+                  JOptionPane.PLAIN_MESSAGE);
+          if (nombre != null && !nombre.trim().isEmpty()) {
+            if (manager.crearEquipo(nombre.trim())) {
+              JOptionPane.showMessageDialog(this, "Equipo creado con éxito.");
+              cargarEquipos();
+            }
+          }
+        });
 
     JButton botonBorrar = new JButton("Borrar Equipo");
     botonBorrar.setPreferredSize(new Dimension(200, 30));
-    botonBorrar.addActionListener(e -> {
-      dialogo.dispose();
-      String nombre = (String) comboEquipos.getSelectedItem();
-      if (nombre != null && manager.eliminarEquipo(nombre)) {
-        JOptionPane.showMessageDialog(this, "Equipo eliminado.");
-        cargarEquipos();
-      }
-    });
+    botonBorrar.addActionListener(
+        e -> {
+          dialogo.dispose();
+          String nombre = (String) comboEquipos.getSelectedItem();
+          if (nombre != null && manager.eliminarEquipo(nombre)) {
+            JOptionPane.showMessageDialog(this, "Equipo eliminado.");
+            cargarEquipos();
+          }
+        });
 
     JButton botonRenombrar = new JButton("Cambiar Nombre");
     botonRenombrar.setPreferredSize(new Dimension(200, 30));
-    botonRenombrar.addActionListener(e -> {
-      dialogo.dispose();
-      String actual = (String) comboEquipos.getSelectedItem();
-      String nuevo = JOptionPane.showInputDialog(this, "Ingresa el nuevo nombre:", "Renombrar Equipo", JOptionPane.PLAIN_MESSAGE);
-      if (nuevo != null && manager.actualizarNombreEquipo(actual, nuevo.trim())) {
-        JOptionPane.showMessageDialog(this, "Nombre actualizado.");
-        cargarEquipos();
-      }
-    });
+    botonRenombrar.addActionListener(
+        e -> {
+          dialogo.dispose();
+          String actual = (String) comboEquipos.getSelectedItem();
+          String nuevo =
+              JOptionPane.showInputDialog(
+                  this, "Ingresa el nuevo nombre:", "Renombrar Equipo", JOptionPane.PLAIN_MESSAGE);
+          if (nuevo != null && manager.actualizarNombreEquipo(actual, nuevo.trim())) {
+            JOptionPane.showMessageDialog(this, "Nombre actualizado.");
+            cargarEquipos();
+          }
+        });
 
     JPanel panelBotones = new JPanel();
     panelBotones.setLayout(new GridBagLayout());
@@ -119,7 +143,6 @@ public class EquipoGui extends JPanel {
     dialogo.add(panelBotones);
     dialogo.setVisible(true);
   }
-
 
   private void cargarEquipos() {
     comboEquipos.removeAllItems();
@@ -161,7 +184,8 @@ public class EquipoGui extends JPanel {
         for (int i = 0; i < pokemones.size(); i++) {
           Pokemon pokemon = pokemones.get(i);
           Imagen imagen = imagenRepo.buscarImagenPorIdPortadaPokemon(pokemon.getId());
-          CartaEquipo carta = new CartaEquipo(pokemon, imagen, nombreEquipo, this::mostrarPokemones);
+          CartaEquipo carta =
+              new CartaEquipo(pokemon, imagen, nombreEquipo, this::mostrarPokemones);
           gbc.gridx = i % 3;
           gbc.gridy = i / 3;
           panelPokemones.add(carta, gbc);
