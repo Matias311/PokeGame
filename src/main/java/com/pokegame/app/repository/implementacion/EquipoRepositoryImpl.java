@@ -5,15 +5,13 @@ import com.pokegame.app.modelo.Pokemon;
 import com.pokegame.app.repository.EquiposRepository;
 import com.pokegame.app.util.ConexionBaseDeDatos;
 import com.pokegame.app.util.VerificarSesion;
-
 import java.sql.Connection;
-import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import java.util.List;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 public class EquipoRepositoryImpl implements EquiposRepository<Equipo> {
 
@@ -30,11 +28,7 @@ public class EquipoRepositoryImpl implements EquiposRepository<Equipo> {
       stmt.setInt(1, clienteId);
       try (ResultSet rs = stmt.executeQuery()) {
         while (rs.next()) {
-          equipos.add(new Equipo(
-                  rs.getInt("id"),
-                  rs.getString("nombre"),
-                  rs.getInt("cliente_id")
-          ));
+          equipos.add(new Equipo(rs.getInt("id"), rs.getString("nombre"), rs.getInt("cliente_id")));
         }
       }
     } catch (SQLException e) {
@@ -44,17 +38,15 @@ public class EquipoRepositoryImpl implements EquiposRepository<Equipo> {
     return equipos;
   }
 
-
-
   @Override
   public List<Pokemon> obtenerPokemonesDeEquipo(String nombreEquipo) {
     List<Pokemon> pokemones = new ArrayList<>();
     String query =
-            "SELECT p.id, p.nombre "
-                    + "FROM Equipo e "
-                    + "JOIN EquipoPokemon ep ON e.id = ep.id_equipo "
-                    + "JOIN Pokemon p ON ep.id_pokemon = p.id "
-                    + "WHERE e.nombre = ?";
+        "SELECT p.id, p.nombre "
+            + "FROM Equipo e "
+            + "JOIN EquipoPokemon ep ON e.id = ep.id_equipo "
+            + "JOIN Pokemon p ON ep.id_pokemon = p.id "
+            + "WHERE e.nombre = ?";
     try (PreparedStatement stmt = conn.prepareStatement(query)) {
       stmt.setString(1, nombreEquipo);
       try (ResultSet rs = stmt.executeQuery()) {
@@ -72,7 +64,7 @@ public class EquipoRepositoryImpl implements EquiposRepository<Equipo> {
   private int obtenerNuevoIdEquipo() throws SQLException {
     String sql = "SELECT ISNULL(MAX(id), 0) + 1 AS nuevoId FROM Equipo";
     try (PreparedStatement stmt = conn.prepareStatement(sql);
-         ResultSet rs = stmt.executeQuery()) {
+        ResultSet rs = stmt.executeQuery()) {
       if (rs.next()) {
         return rs.getInt("nuevoId");
       }
@@ -99,7 +91,6 @@ public class EquipoRepositoryImpl implements EquiposRepository<Equipo> {
 
     return -1;
   }
-
 
   @Override
   public String obtenerNombreEquipoPorId(int idEquipo) {
@@ -183,7 +174,7 @@ public class EquipoRepositoryImpl implements EquiposRepository<Equipo> {
 
     String sqlId = "SELECT ISNULL(MAX(id), 0) + 1 AS nuevoId FROM EquipoPokemon";
     try (Statement stmt = conn.createStatement();
-         ResultSet rs = stmt.executeQuery(sqlId)) {
+        ResultSet rs = stmt.executeQuery(sqlId)) {
       if (rs.next()) {
         nuevoId = rs.getInt("nuevoId");
       }
@@ -219,4 +210,3 @@ public class EquipoRepositoryImpl implements EquiposRepository<Equipo> {
     }
   }
 }
-

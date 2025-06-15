@@ -31,6 +31,10 @@ public class Cliente {
     this.nombreUsuario = nombreUsuario;
   }
 
+  public Cliente(String nombre) {
+    this.nombreUsuario = nombre;
+  }
+
   /**
    * Se crea un cliente solamente con el nombre y la password sin hashear, en el repositoryimpl se
    * le agrega el id.
