@@ -73,4 +73,19 @@ public class ClienteRepositoryImpl implements ClienteRepository<Cliente> {
     }
     return 0;
   }
+
+  public boolean cambiarNombreUsuario(int id, String nuevoNombre) {
+    boolean status = false;
+    try (PreparedStatement stmt =
+                 conn.prepareStatement("UPDATE Cliente SET nombre_usuario = ? WHERE id = ?")) {
+      stmt.setString(1, nuevoNombre);
+      stmt.setInt(2, id);
+      int filas = stmt.executeUpdate();
+      status = filas > 0;
+    } catch (Exception e) {
+      System.err.println("Error al cambiar el nombre de usuario: " + e.getMessage());
+      e.printStackTrace();
+    }
+    return status;
+  }
 }

@@ -12,4 +12,6 @@ public interface ClienteRepository<T> {
   T authenticate(String username, String password);
 
   int obtenerNuevoId();
+
+  boolean cambiarNombreUsuario(int id, String nuevoNombre);
 }
