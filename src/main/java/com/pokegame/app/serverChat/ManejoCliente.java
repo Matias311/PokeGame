@@ -27,18 +27,28 @@ public class ManejoCliente implements Runnable {
       out = new PrintWriter(clientSocket.getOutputStream(), true);
 
       // Obtener el nombre de usuario del cliente (si lo envía al conectarse)
-      String nombreUsuario = in.readLine(); // Asume que el cliente envía su nombre primero
+      String[] primerMensaje = in.readLine().split(":", 2);
+      String nombreUsuario = primerMensaje[0]; // nombre
+      int idUsuario = Integer.parseInt(primerMensaje[1]);
       System.out.println("Cliente conectado: " + nombreUsuario);
 
       String inputLine;
       while ((inputLine = in.readLine()) != null) {
-        // Formato: "usuario:mensaje"
-        String mensajeCompleto = nombreUsuario + ":" + inputLine;
+        // Formato: "tipo:usuario:id:contenido"
+        String[] contenidoMsj =
+            inputLine.split(":", 2); // solamente se le pasa el tipo y el contenido
+        String mensajeCompleto = null;
+        if (contenidoMsj.length == 2) {
+          mensajeCompleto =
+              contenidoMsj[0] + ":" + nombreUsuario + ":" + idUsuario + ":" + contenidoMsj[1];
+        }
 
         // Enviar a todos los clientes (broadcast)
-        synchronized (clientes) {
-          for (ManejoCliente cliente : clientes) {
-            cliente.out.println(mensajeCompleto);
+        if (mensajeCompleto != null) {
+          synchronized (clientes) {
+            for (ManejoCliente cliente : clientes) {
+              cliente.out.println(mensajeCompleto);
+            }
           }
         }
       }
