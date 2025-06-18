@@ -54,12 +54,8 @@ public class ChatInicio extends JPanel {
             label.setOpaque(true);
             label.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
-            // Alinear a la derecha si es propio, izquierda si es de otro
-            boolean esPropio =
-                msj.getCliente()
-                    .getNombreUsuario()
-                    .equals(VerificarSesion.getCliente().getNombreUsuario());
-
+            // Alinear a la derecha si es propio, izquierda si es de otro (por id del cliente)
+            boolean esPropio = msj.getCliente().getId() == VerificarSesion.getCliente().getId();
             if (esPropio) { // Mensaje propio (derecha)
               label.setBackground(new Color(212, 237, 218)); // Color verde claro
               label.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -101,7 +97,10 @@ public class ChatInicio extends JPanel {
 
       // Enviar el nombre de usuario al servidor (lo primero que se envía)
       Cliente clienteLocal = VerificarSesion.getCliente();
-      writer.println(clienteLocal.getNombreUsuario()); // Envía el nombre al servidor
+      writer.println(
+          clienteLocal.getNombreUsuario()
+              + ":"
+              + clienteLocal.getId()); // Envía el nombre al servidor
 
       // Hilo para recibir mensajes
       new Thread(
@@ -109,19 +108,25 @@ public class ChatInicio extends JPanel {
                 try {
                   String mensajeRecibido;
                   while ((mensajeRecibido = reader.readLine()) != null) {
-                    // Separar el usuario del mensaje (formato "usuario:mensaje")
-                    String[] partes = mensajeRecibido.split(":", 2);
-                    String remitente = partes[0];
-                    String textoMensaje = partes[1];
+                    // Separar el usuario del mensaje (formato "tipo:usuario:id:mensaje")
+                    String[] partes = mensajeRecibido.split(":", 4);
+                    String tipo = partes[0];
+                    String remitente = partes[1];
+                    String idRemitente = partes[2];
+                    String textoMensaje = partes[3];
 
                     // Crear el objeto Mensaje
-                    Mensaje msj = new Mensaje(textoMensaje, new Cliente(remitente));
+                    if (tipo.equals("mensaje")) {
+                      Mensaje msj =
+                          new Mensaje(
+                              textoMensaje, new Cliente(Integer.parseInt(idRemitente), remitente));
 
-                    // Añadir al modelo en el hilo de Swing
-                    SwingUtilities.invokeLater(
-                        () -> {
-                          modelo.addElement(msj);
-                        });
+                      // Añadir al modelo en el hilo de Swing
+                      SwingUtilities.invokeLater(
+                          () -> {
+                            modelo.addElement(msj);
+                          });
+                    }
                   }
                 } catch (Exception e) {
                   System.out.println("Error al recibir mensaje: " + e.getMessage());
@@ -137,7 +142,7 @@ public class ChatInicio extends JPanel {
   private void sendMensaje() {
     String texto = mensaje.getText().trim();
     if (!texto.isEmpty()) {
-      writer.println(texto); // Envía solo el texto (el servidor añade el usuario)
+      writer.println("mensaje" + ":" + texto); // Envía solo el texto (el servidor añade el usuario)
       mensaje.setText(""); // Limpia el campo de texto
     }
   }
