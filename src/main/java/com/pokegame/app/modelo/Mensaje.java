@@ -6,6 +6,16 @@ import java.time.LocalDateTime;
 /** Mensaje implementa Serializable para poder pasarla a bits. */
 public class Mensaje implements Serializable {
 
+  private String tipoMensaje;
+
+  public String getTipoMensaje() {
+    return tipoMensaje;
+  }
+
+  public void setTipoMensaje(String tipoMensaje) {
+    this.tipoMensaje = tipoMensaje;
+  }
+
   private String mensaje;
   private Cliente cliente;
   private LocalDateTime time;
@@ -16,10 +26,11 @@ public class Mensaje implements Serializable {
    * @param mensaje String
    * @param cliente Cliente
    */
-  public Mensaje(String mensaje, Cliente cliente) {
+  public Mensaje(String tipoMensaje, String mensaje, Cliente cliente) {
     this.mensaje = mensaje;
     this.cliente = cliente;
     this.time = LocalDateTime.now();
+    this.tipoMensaje = tipoMensaje;
   }
 
   public String getMensaje() {

@@ -1,81 +1,65 @@
 package com.pokegame.app.gui;
 
+import com.pokegame.app.manager.EquipoManager;
 import com.pokegame.app.modelo.Cliente;
+import com.pokegame.app.modelo.Equipo;
 import com.pokegame.app.modelo.Mensaje;
+import com.pokegame.app.modelo.Pokemon;
+import com.pokegame.app.util.SerializarEquipo;
 import com.pokegame.app.util.VerificarSesion;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.List;
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 /** ChatInicio. */
 public class ChatInicio extends JPanel {
 
-  private DefaultListModel<Mensaje> modelo;
   private Socket socket;
   private PrintWriter writer;
   private BufferedReader reader;
   private JTextField mensaje;
   private JButton send;
+  private JButton share;
+  private EquipoManager managerEquipo = new EquipoManager();
+  private JTextPane textpane;
+  StyledDocument doc;
 
   /** Inicio de ChatInicio. */
   public ChatInicio() {
     setLayout(new BorderLayout());
-    JList<Mensaje> list = new JList<>();
-    modelo = new DefaultListModel<>();
-    list.setModel(modelo);
 
-    list.setCellRenderer(
-        new DefaultListCellRenderer() {
-          @Override
-          public Component getListCellRendererComponent(
-              JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-            JLabel label =
-                (JLabel)
-                    super.getListCellRendererComponent(
-                        list, value, index, isSelected, cellHasFocus);
-
-            Mensaje msj = (Mensaje) value;
-            label.setText(msj.getCliente().getNombreUsuario() + ": " + msj.getMensaje());
-            label.setOpaque(true);
-            label.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-
-            // Alinear a la derecha si es propio, izquierda si es de otro (por id del cliente)
-            boolean esPropio = msj.getCliente().getId() == VerificarSesion.getCliente().getId();
-            if (esPropio) { // Mensaje propio (derecha)
-              label.setBackground(new Color(212, 237, 218)); // Color verde claro
-              label.setHorizontalAlignment(SwingConstants.RIGHT);
-            } else { // Mensaje de otro (izquierda)
-              label.setBackground(new Color(255, 238, 186)); // Color amarillo claro
-              label.setHorizontalAlignment(SwingConstants.LEFT);
-            }
-
-            return label;
-          }
-        });
-
-    add(BorderLayout.CENTER, list);
+    textpane = new JTextPane();
+    doc = textpane.getStyledDocument();
+    add(BorderLayout.CENTER, textpane);
 
     // seccion para escribir
     JPanel bottomPanel = new JPanel();
     bottomPanel.setBackground(new Color(179, 179, 179));
 
-    JButton share = new JButton("SHARE");
+    share = new JButton("SHARE");
     bottomPanel.add(share);
+    share.addActionListener(e -> mostrarSeleccionEquipo());
 
     mensaje = new JTextField();
     mensaje.setPreferredSize(new Dimension(400, 30));
@@ -116,17 +100,27 @@ public class ChatInicio extends JPanel {
                     String textoMensaje = partes[3];
 
                     // Crear el objeto Mensaje
-                    if (tipo.equals("mensaje")) {
-                      Mensaje msj =
-                          new Mensaje(
-                              textoMensaje, new Cliente(Integer.parseInt(idRemitente), remitente));
+                    Mensaje msj =
+                        new Mensaje(
+                            tipo,
+                            textoMensaje,
+                            new Cliente(Integer.parseInt(idRemitente), remitente));
+                    // Verificar si el mensaje es mio
+                    boolean esPropio =
+                        msj.getCliente().getId() == VerificarSesion.getCliente().getId();
 
-                      // Añadir al modelo en el hilo de Swing
-                      SwingUtilities.invokeLater(
-                          () -> {
-                            modelo.addElement(msj);
-                          });
-                    }
+                    // Background color para los mensajes
+                    Color color = esPropio ? Color.BLUE : Color.GRAY;
+
+                    // Añadir al modelo en el hilo de Swing
+                    SwingUtilities.invokeLater(
+                        () -> {
+                          if (msj.getTipoMensaje().equals("mensaje")) {
+                            insertarMensaje(msj, esPropio, color);
+                          } else if (msj.getTipoMensaje().equals("equipo")) {
+                            insertarEquipoMensaje(msj, esPropio, color);
+                          }
+                        });
                   }
                 } catch (Exception e) {
                   System.out.println("Error al recibir mensaje: " + e.getMessage());
@@ -144,6 +138,130 @@ public class ChatInicio extends JPanel {
     if (!texto.isEmpty()) {
       writer.println("mensaje" + ":" + texto); // Envía solo el texto (el servidor añade el usuario)
       mensaje.setText(""); // Limpia el campo de texto
+    }
+  }
+
+  private void mostrarSeleccionEquipo() {
+    JDialog ventana = new JDialog();
+    ventana.setTitle("Lista de equipos");
+    ventana.setSize(300, 200);
+    ventana.setLayout(new FlowLayout());
+
+    // Dropdown con los nombres de los equipos
+    List<Equipo> nombresEquipos = managerEquipo.obtenerEquipos();
+    JComboBox<String> dropdown = new JComboBox<>();
+    dropdown.setPreferredSize(new Dimension(300, 30));
+
+    if (nombresEquipos.size() >= 1) {
+      for (Equipo equipo : nombresEquipos) {
+        dropdown.addItem(equipo.getNombre());
+      }
+    } else {
+      dropdown.addItem("No se encontraron equipos");
+    }
+
+    // Boton de cancelar
+    JButton cancelarBtn = new JButton("Cancelar");
+    cancelarBtn.addActionListener(e -> ventana.dispose());
+
+    // Boton Aceptar
+    JButton aceptarBtn = new JButton("Enviar");
+    aceptarBtn.addActionListener(
+        e -> {
+          sendEquipo((String) dropdown.getSelectedItem());
+          ventana.dispose();
+        });
+
+    ventana.add(dropdown);
+    ventana.add(aceptarBtn);
+    ventana.add(cancelarBtn);
+    ventana.setVisible(true);
+  }
+
+  private void sendEquipo(String nombreEquipo) {
+    // Crear equipo y serializarlo (asi se puede mandar)
+    List<Pokemon> lista = managerEquipo.obtenerPokemones(nombreEquipo);
+    Equipo equipo = new Equipo(nombreEquipo, lista);
+    String msj = SerializarEquipo.serializarEquipo(equipo);
+
+    writer.println("equipo" + ":" + msj);
+  }
+
+  private void agregarNuevoEquipo(Equipo equipo) {
+    boolean creado = managerEquipo.crearEquipo(equipo.getNombre());
+    if (creado) {
+      int idEquipo = managerEquipo.obtenerIdPorNombre(equipo.getNombre());
+      List<Pokemon> listaPokemon = equipo.getListaPokemon();
+
+      for (Pokemon pokemon : listaPokemon) {
+        try {
+          managerEquipo.agregarPokemonEquipo(idEquipo, pokemon.getId());
+        } catch (Exception e) {
+          System.out.println(e);
+        }
+      }
+    }
+    JOptionPane.showConfirmDialog(null, "El equipo se ha agregado correctamente");
+  }
+
+  private void insertarMensaje(Mensaje msj, boolean mio, Color background) {
+    try {
+      // Crear un panel para contener el mensaje
+      JPanel panel = new JPanel(new BorderLayout());
+      panel.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 5));
+      panel.setBackground(background);
+
+      // Crear etiqueta con el texto
+      JLabel label = new JLabel(msj.getCliente().getNombreUsuario() + ": " + msj.getMensaje());
+      label.setForeground(Color.WHITE);
+      label.setHorizontalAlignment(mio ? SwingConstants.RIGHT : SwingConstants.LEFT);
+      panel.add(label, BorderLayout.CENTER);
+
+      // Insertar el panel en el JTextPane
+      Style style = doc.addStyle("panelstyle", null);
+      StyleConstants.setAlignment(
+          style, mio ? StyleConstants.ALIGN_RIGHT : StyleConstants.ALIGN_LEFT);
+
+      textpane.insertComponent(panel);
+      doc.insertString(doc.getLength(), "\n", style);
+
+      textpane.setCaretPosition(doc.getLength());
+    } catch (BadLocationException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private void insertarEquipoMensaje(Mensaje msj, boolean mio, Color bacColor) {
+    try {
+      Equipo equipo = SerializarEquipo.deserializarEquipo(msj.getMensaje());
+
+      // Panel base
+      JPanel panel = new JPanel(new BorderLayout());
+      panel.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 5));
+      panel.setBackground(bacColor);
+
+      // Texto
+      String mensaje =
+          String.format(
+              "%s : ha compartido su equipo %s",
+              msj.getCliente().getNombreUsuario(), equipo.getNombre());
+      JLabel label = new JLabel(mensaje);
+      label.setHorizontalAlignment(mio ? SwingConstants.RIGHT : SwingConstants.LEFT);
+      label.setForeground(Color.WHITE);
+      panel.add(label, BorderLayout.CENTER);
+
+      // Agregar boton de agregar equipo
+      JButton btn = new JButton("+");
+      btn.addActionListener(e -> agregarNuevoEquipo(equipo));
+      panel.add(btn, BorderLayout.EAST);
+
+      // Agregar el componente
+      textpane.insertComponent(panel);
+      doc.insertString(doc.getLength(), "\n", null);
+      textpane.setCaretPosition(doc.getLength());
+
+    } catch (Exception e) {
+      System.out.println(e);
     }
   }
 }

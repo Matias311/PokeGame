@@ -65,3 +65,18 @@ GUI → Servicio → Repository (Interface) → RepositoryImpl (JDBC) → Base d
 5. Opcional: En "scan scope", selecciona only java sources 
 6. aplica los cambio
 
+
+### Creacion de nueva tabla
+Mensaje
+```sql
+        IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Mensaje')
+        BEGIN
+            CREATE TABLE Mensaje (
+                id int IDENTITY(1,1) PRIMARY KEY,
+                tipo_mensaje varchar(20) DEFAULT 'texto',
+                contenido_mensaje NVARCHAR(MAX),
+                fecha_hora DATETIME DEFAULT GETDATE(),
+                id_cliente int foreign key (id_cliente) references Cliente(id)
+            );
+        END
+```
