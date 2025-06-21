@@ -4,6 +4,7 @@ import com.pokegame.app.modelo.Equipo;
 import com.pokegame.app.modelo.Pokemon;
 import com.pokegame.app.repository.implementacion.EquipoRepositoryImpl;
 import com.pokegame.app.util.VerificarSesion;
+import java.sql.SQLException;
 import java.util.List;
 
 public class EquipoManager {
@@ -39,5 +40,12 @@ public class EquipoManager {
   public boolean eliminarPokemon(String nombreEquipo, Pokemon pokemon) {
     int idEquipo = obtenerIdPorNombre(nombreEquipo);
     return equipoRepo.eliminarPokemonDeEquipo(idEquipo, pokemon.getId());
+  }
+
+  public void agregarPokemonEquipo(int idEquipo, int idPokemon) throws SQLException {
+    boolean agregado = equipoRepo.agregarPokemonAEquipo(idEquipo, idPokemon);
+    if (!agregado) {
+      throw new SQLException();
+    }
   }
 }

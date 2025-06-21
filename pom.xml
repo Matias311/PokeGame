@@ -46,6 +46,12 @@
       <artifactId>bcrypt</artifactId>
       <version>0.10.2</version>
     </dependency>
+    <!-- GSON para manejar serializacion de los objetos  -->
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.11.0</version>
+    </dependency>
   </dependencies>
   <build>
     <pluginManagement>
