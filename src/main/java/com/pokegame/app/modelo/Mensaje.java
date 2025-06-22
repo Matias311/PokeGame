@@ -7,15 +7,6 @@ import java.time.LocalDateTime;
 public class Mensaje implements Serializable {
 
   private String tipoMensaje;
-
-  public String getTipoMensaje() {
-    return tipoMensaje;
-  }
-
-  public void setTipoMensaje(String tipoMensaje) {
-    this.tipoMensaje = tipoMensaje;
-  }
-
   private String mensaje;
   private Cliente cliente;
   private LocalDateTime time;
@@ -55,5 +46,13 @@ public class Mensaje implements Serializable {
 
   public void setTime(LocalDateTime time) {
     this.time = time;
+  }
+
+  public String getTipoMensaje() {
+    return tipoMensaje;
+  }
+
+  public void setTipoMensaje(String tipoMensaje) {
+    this.tipoMensaje = tipoMensaje;
   }
 }

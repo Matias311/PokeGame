@@ -5,6 +5,7 @@ import com.pokegame.app.modelo.Cliente;
 import com.pokegame.app.modelo.Equipo;
 import com.pokegame.app.modelo.Mensaje;
 import com.pokegame.app.modelo.Pokemon;
+import com.pokegame.app.repository.implementacion.MensajeRepositoryImpl;
 import com.pokegame.app.util.SerializarEquipo;
 import com.pokegame.app.util.VerificarSesion;
 import java.awt.BorderLayout;
@@ -44,6 +45,7 @@ public class ChatInicio extends JPanel {
   private EquipoManager managerEquipo = new EquipoManager();
   private JTextPane textpane;
   StyledDocument doc;
+  private final MensajeRepositoryImpl mensajeRepository = new MensajeRepositoryImpl();
 
   /** Inicio de ChatInicio. */
   public ChatInicio() {
@@ -138,6 +140,8 @@ public class ChatInicio extends JPanel {
     if (!texto.isEmpty()) {
       writer.println("mensaje" + ":" + texto); // Envía solo el texto (el servidor añade el usuario)
       mensaje.setText(""); // Limpia el campo de texto
+      Mensaje msj = new Mensaje("mensaje", texto, VerificarSesion.getCliente());
+      mensajeRepository.guardarMensaje(msj);
     }
   }
 
@@ -183,6 +187,9 @@ public class ChatInicio extends JPanel {
     List<Pokemon> lista = managerEquipo.obtenerPokemones(nombreEquipo);
     Equipo equipo = new Equipo(nombreEquipo, lista);
     String msj = SerializarEquipo.serializarEquipo(equipo);
+
+    Mensaje mensaje = new Mensaje("equipo", msj, VerificarSesion.getCliente());
+    mensajeRepository.guardarMensaje(mensaje);
 
     writer.println("equipo" + ":" + msj);
   }

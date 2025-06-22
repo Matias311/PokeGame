@@ -1,5 +1,7 @@
 package com.pokegame.app.serverChat;
 
+import com.pokegame.app.modelo.Mensaje;
+import com.pokegame.app.repository.implementacion.MensajeRepositoryImpl;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,11 +10,18 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+/** ManejoCliente. */
 public class ManejoCliente implements Runnable {
   private Socket clientSocket;
   private PrintWriter out;
   private static List<ManejoCliente> clientes = new ArrayList<>();
+  private final MensajeRepositoryImpl mensajeRepository = new MensajeRepositoryImpl();
 
+  /**
+   * Crea el socket del cliente y espera para guardar el cliente en la lista.
+   *
+   * @param socket Socket
+   */
   public ManejoCliente(Socket socket) {
     this.clientSocket = socket;
     synchronized (clientes) {
@@ -32,6 +41,23 @@ public class ManejoCliente implements Runnable {
       int idUsuario = Integer.parseInt(primerMensaje[1]);
       System.out.println("Cliente conectado: " + nombreUsuario);
 
+      // Obtener los mensajes de la base de datos
+      List<Mensaje> lista = mensajeRepository.traerTodosLosMensajes();
+      for (Mensaje mensaje : lista) {
+        String mensajeCompleto =
+            mensaje.getTipoMensaje()
+                + ":"
+                + mensaje.getCliente().getNombreUsuario()
+                + ":"
+                + mensaje.getCliente().getId()
+                + ":"
+                + mensaje.getMensaje();
+        for (ManejoCliente cliente : clientes) {
+          cliente.out.println(mensajeCompleto);
+        }
+      }
+
+      // Obtiene los mensajes
       String inputLine;
       while ((inputLine = in.readLine()) != null) {
         // Formato: "tipo:usuario:id:contenido"
