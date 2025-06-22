@@ -19,6 +19,7 @@ public class Pokedex extends JPanel {
   private JButton btnRetroceder;
   private JButton btnAdelante;
   private JTextField barraBusqueda;
+  private String ordenActual = "id ASC"; // Orden actual activo
 
   public Pokedex() {
     setLayout(new BorderLayout());
@@ -36,15 +37,36 @@ public class Pokedex extends JPanel {
     JComboBox<String> dropdown = new JComboBox<>(
             new String[] {
                     "Seleccione ordenamiento",
-                    "Ordenar por nombre DESC",
-                    "Ordenar por id DESC",
+                    "Ordenar por nombre ASC",
+                    "Ordenar por id ASC",
                     "Ordenar por ataque DESC"
             }
     );
     panelNav.add(dropdown);
 
+    dropdown.addActionListener(e -> {
+      String seleccion = (String) dropdown.getSelectedItem();
+      switch (seleccion) {
+        case "Ordenar por nombre ASC":
+          ordenActual = "nombre ASC";
+          break;
+        case "Ordenar por id ASC":
+          ordenActual = "id ASC";
+          break;
+        case "Ordenar por ataque DESC":
+          ordenActual = "ataque DESC";
+          break;
+        default:
+          ordenActual = "id ASC";
+          break;
+      }
+      inicio = 0;
+      listaPokemon = pokemonServices.traerPokemonOrdenadoConPaginacion(ordenActual, inicio, CANT);
+      rePintarContenedor(listaPokemon);
+    });
+
     add(panelNav, BorderLayout.NORTH);
-    listaPokemon = pokemonServices.traerPaginacionPokemon(inicio, CANT);
+    listaPokemon = pokemonServices.traerPokemonOrdenadoConPaginacion(ordenActual, inicio, CANT);
     rePintarContenedor(listaPokemon);
 
     JPanel btnPanel = new JPanel();
@@ -61,12 +83,13 @@ public class Pokedex extends JPanel {
       if (inicio < 131) {
         btnAdelante.setEnabled(true);
       }
-      listaPokemon = pokemonServices.traerPaginacionPokemon(inicio, CANT);
+      listaPokemon = pokemonServices.traerPokemonOrdenadoConPaginacion(ordenActual, inicio, CANT);
       rePintarContenedor(listaPokemon);
     });
 
     btnAdelante = new JButton("Adelante");
     btnPanel.add(btnAdelante);
+
     btnAdelante.addActionListener(e -> {
       inicio += 20;
       if (inicio >= 131) {
@@ -76,7 +99,7 @@ public class Pokedex extends JPanel {
       if (inicio > 0) {
         btnRetroceder.setEnabled(true);
       }
-      listaPokemon = pokemonServices.traerPaginacionPokemon(inicio, CANT);
+      listaPokemon = pokemonServices.traerPokemonOrdenadoConPaginacion(ordenActual, inicio, CANT);
       rePintarContenedor(listaPokemon);
     });
 
@@ -111,15 +134,9 @@ public class Pokedex extends JPanel {
       listaPokemon = pokemonServices.traerPokemonNombre(nombre);
       rePintarContenedor(listaPokemon);
       barraBusqueda.setText("");
-      if (listaPokemon.size() <= 20) {
-        btnAdelante.setEnabled(false);
-        btnRetroceder.setEnabled(false);
-      }
     } else {
-      listaPokemon = pokemonServices.traerPaginacionPokemon(inicio, CANT);
+      listaPokemon = pokemonServices.traerPokemonOrdenadoConPaginacion(ordenActual, inicio, CANT);
       rePintarContenedor(listaPokemon);
-      btnAdelante.setEnabled(true);
     }
   }
 }
-
