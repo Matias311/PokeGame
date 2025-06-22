@@ -35,8 +35,17 @@ public class ClienteRepositoryImpl implements ClienteRepository<Cliente> {
 
   @Override
   public Cliente obtenerUsuario(int id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'obtenerUsuario'");
+    Cliente cliente = null;
+    try (PreparedStatement state = conn.prepareStatement("select * from Cliente where id = ?;"); ) {
+      state.setInt(1, id);
+      ResultSet result = state.executeQuery();
+      while (result.next()) {
+        cliente = new Cliente(result.getInt("id"), result.getString("nombre_usuario"));
+      }
+    } catch (Exception e) {
+      System.out.println(e);
+    }
+    return cliente;
   }
 
   @Override
@@ -77,7 +86,7 @@ public class ClienteRepositoryImpl implements ClienteRepository<Cliente> {
   public boolean cambiarNombreUsuario(int id, String nuevoNombre) {
     boolean status = false;
     try (PreparedStatement stmt =
-                 conn.prepareStatement("UPDATE Cliente SET nombre_usuario = ? WHERE id = ?")) {
+        conn.prepareStatement("UPDATE Cliente SET nombre_usuario = ? WHERE id = ?")) {
       stmt.setString(1, nuevoNombre);
       stmt.setInt(2, id);
       int filas = stmt.executeUpdate();
