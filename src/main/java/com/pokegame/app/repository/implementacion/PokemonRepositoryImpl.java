@@ -33,20 +33,55 @@ public class PokemonRepositoryImpl implements PokemonRepository<Pokemon> {
 
   @Override
   public List<Pokemon> traerPokemonOrdenadoNombre() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'traerPokemonOrdenadoNombre'");
+    List<Pokemon> lista = new ArrayList<>();
+    try (PreparedStatement state = conn.prepareStatement(
+            "SELECT id, nombre FROM Pokemon ORDER BY nombre ASC")) {
+      ResultSet result = state.executeQuery();
+      lista = crearListaPokemonIdNombre(result);
+    } catch (Exception e) {
+      System.out.println(e);
+    }
+    return lista;
   }
 
   @Override
   public List<Pokemon> traerPokemonOrdenadoId() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'traerPokemonOrdenadoId'");
+    List<Pokemon> lista = new ArrayList<>();
+    try (PreparedStatement state = conn.prepareStatement(
+            "SELECT id, nombre FROM Pokemon ORDER BY id ASC")) {
+      ResultSet result = state.executeQuery();
+      lista = crearListaPokemonIdNombre(result);
+    } catch (Exception e) {
+      System.out.println(e);
+    }
+    return lista;
   }
 
   @Override
   public List<Pokemon> traerPokemonOrdenadoAtaque() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'traerPokemonOrdenadoAtaque'");
+    List<Pokemon> lista = new ArrayList<>();
+    try (PreparedStatement state = conn.prepareStatement(
+            "SELECT id, nombre FROM Pokemon ORDER BY ataque DESC")) {
+      ResultSet result = state.executeQuery();
+      lista = crearListaPokemonIdNombre(result);
+    } catch (Exception e) {
+      System.out.println(e);
+    }
+    return lista;
+  }
+
+  public List<Pokemon> traerPokemonOrdenadoConPaginacion(String orden, int inicio, int cantidad) {
+    List<Pokemon> lista = new ArrayList<>();
+    String sql = "SELECT id, nombre FROM Pokemon ORDER BY " + orden + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+    try (PreparedStatement state = conn.prepareStatement(sql)) {
+      state.setInt(1, inicio);
+      state.setInt(2, cantidad);
+      ResultSet result = state.executeQuery();
+      lista = crearListaPokemonIdNombre(result);
+    } catch (Exception e) {
+      System.out.println(e);
+    }
+    return lista;
   }
 
   @Override
