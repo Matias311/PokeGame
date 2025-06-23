@@ -1,5 +1,6 @@
 package com.pokegame.app.repository.implementacion;
 
+import com.pokegame.app.modelo.Cliente;
 import com.pokegame.app.modelo.Equipo;
 import com.pokegame.app.modelo.Pokemon;
 import com.pokegame.app.repository.EquiposRepository;
@@ -41,14 +42,16 @@ public class EquipoRepositoryImpl implements EquiposRepository<Equipo> {
   @Override
   public List<Pokemon> obtenerPokemonesDeEquipo(String nombreEquipo) {
     List<Pokemon> pokemones = new ArrayList<>();
+    Cliente cliente = VerificarSesion.getCliente();
     String query =
         "SELECT p.id, p.nombre "
             + "FROM Equipo e "
             + "JOIN EquipoPokemon ep ON e.id = ep.id_equipo "
             + "JOIN Pokemon p ON ep.id_pokemon = p.id "
-            + "WHERE e.nombre = ?";
+            + "WHERE e.nombre = ? and e.cliente_id = ?";
     try (PreparedStatement stmt = conn.prepareStatement(query)) {
       stmt.setString(1, nombreEquipo);
+      stmt.setInt(2, cliente.getId());
       try (ResultSet rs = stmt.executeQuery()) {
         while (rs.next()) {
           Pokemon pokemon = new Pokemon(rs.getInt("id"), rs.getString("nombre"));

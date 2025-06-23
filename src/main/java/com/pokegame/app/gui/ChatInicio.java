@@ -185,6 +185,7 @@ public class ChatInicio extends JPanel {
   private void sendEquipo(String nombreEquipo) {
     // Crear equipo y serializarlo (asi se puede mandar)
     List<Pokemon> lista = managerEquipo.obtenerPokemones(nombreEquipo);
+
     Equipo equipo = new Equipo(nombreEquipo, lista);
     String msj = SerializarEquipo.serializarEquipo(equipo);
 
