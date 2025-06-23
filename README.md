@@ -80,3 +80,5 @@ Mensaje
             );
         END
 ```
+# Para conseguir las tablas necesarias para la base de datos, revisar 
+[scrapping-api-pokedex](https://github.com/Matias311/scraping-pokeapi)
